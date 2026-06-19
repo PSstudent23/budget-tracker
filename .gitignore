@@ -1,0 +1,7 @@
+budget-tracker/
+db-data/
+docker-server-image-env.tar
+*.tar
+*.tar.gz
+node_modules/
+.env

@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  env:
+    image: docker-server-image-env
+    container_name: student_env
+    stdin_open: true
+    tty: true
+    working_dir: /workspace
+    volumes:
+      - ./workspace:/workspace
+    ports:
+      - "30040:3000"
+      - "30041:3001"
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.3.39
+    container_name: student_db
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: SISIII2026_89241250
+      MYSQL_USER: studenti
+      MYSQL_PASSWORD: S039C8R7
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: student_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - "8080:80"
+volumes:
+  mariadb_data:
+    name: mariadb_data
