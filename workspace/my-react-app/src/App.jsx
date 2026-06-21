@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LandingPage from './LandingPage'
 import Login from './Login'
 import Register from './Register'
@@ -13,9 +13,46 @@ export default function App() {
     if (message) setToast(message)
   }
 
-  if (view === 'landing') return <LandingPage onNavigate={navigate} />
-  if (view === 'login')    return <Login onLogin={u => { setUser(u); setView('app') }} onNavigate={navigate} toast={toast} />
-  if (view === 'register') return <Register onNavigate={navigate} />
+  // ✅ RESTORE SESSION ON PAGE LOAD
+  useEffect(() => {
+    fetch("http://localhost:30040/me", {
+      credentials: "include",
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          setUser(data.user)
+          setView('app') // skip login if already logged in
+        } else {
+          setView('landing')
+        }
+      })
+      .catch(() => {
+        setView('landing')
+      })
+  }, [])
 
-  return <div style={{ padding: '2rem' }}>Welcome, {user?.first_name}!</div>
+  if (view === 'landing')
+    return <LandingPage onNavigate={navigate} />
+
+  if (view === 'login')
+    return (
+      <Login
+        onLogin={u => {
+          setUser(u)
+          setView('app')
+        }}
+        onNavigate={navigate}
+        toast={toast}
+      />
+    )
+
+  if (view === 'register')
+    return <Register onNavigate={navigate} />
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      Welcome, {user?.first_name}!
+    </div>
+  )
 }

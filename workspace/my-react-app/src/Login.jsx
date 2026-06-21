@@ -17,6 +17,7 @@ export default function Login({ onLogin }) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include", // ✅ THIS IS REQUIRED
       body: JSON.stringify(form),
     })
       .then((res) => res.json())

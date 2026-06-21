@@ -1,3 +1,5 @@
+import session from "express-session";
+
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
@@ -7,6 +9,20 @@ const app = express();
 const port = 3000;
 
 app.use(cors());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "temporary-development-secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+      maxAge: 1000 * 60 * 60,
+    },
+  })
+);
 
 app.get('/', async (req, res) => {
   let conn;
