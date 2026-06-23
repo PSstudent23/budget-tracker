@@ -1,7 +1,7 @@
 export default function Home({ user }) {
   return (
     <div>
-      <h2 style={{ marginBottom: "16px" }}>Welcome back, {user?.first_name} 👋</h2>
+      <h2 class="title" >Welcome back, {user?.first_name} </h2>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "24px" }}>
         {[
