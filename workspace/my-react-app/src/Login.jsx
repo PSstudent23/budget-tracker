@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router";
 
-export default function Login({ onLogin }) {
+export default function Login({ setUser }) {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -17,13 +20,17 @@ export default function Login({ onLogin }) {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include", // ✅ THIS IS REQUIRED
+      credentials: "include",
       body: JSON.stringify(form),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.ok) onLogin(data.user);
-        else setMessage(data.error);
+        if (data.ok) {
+          setUser(data.user);
+          navigate("/app"); // go to dashboard
+        } else {
+          setMessage(data.error);
+        }
       })
       .catch((err) => setMessage(err.message));
   };
@@ -54,7 +61,9 @@ export default function Login({ onLogin }) {
 
       <p>
         Don't have an account?{" "}
-        <button onClick={() => onLogin(null, "register")}>Register</button>
+        <Link to="/register">
+          <button>Register</button>
+        </Link>
       </p>
     </div>
   );

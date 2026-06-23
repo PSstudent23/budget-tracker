@@ -1,58 +1,58 @@
-import { useState, useEffect } from 'react'
-import LandingPage from './LandingPage'
-import Login from './Login'
-import Register from './Register'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { useState, useEffect } from "react";
+import LandingPage from "./LandingPage";
+import Login from "./Login";
+import Register from "./Register";
+import AppLayout from "./components/AppLayout";
+import Home from "./pages/Home";
+import Transactions from "./pages/Transactions";
+
+/*
+import Budgets from "./pages/Budgets";
+import Goals from "./pages/Goals";
+import Simulator from "./pages/Simulator";
+import Notifications from "./pages/Notifications";
+import Settings from "./pages/Settings";
+*/
 
 export default function App() {
-  const [view, setView] = useState('landing')
-  const [user, setUser] = useState(null)
-  const [toast, setToast] = useState(null)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const navigate = (page, message = null) => {
-    setView(page)
-    if (message) setToast(message)
+  useEffect(() => {
+    fetch("http://localhost:30040/me", { credentials: "include" })
+      .then(res => res.json())
+      .then(data => setUser(data.ok ? data.user : null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return null;
+
+  // If not logged in, send to login
+  if (!user) {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </BrowserRouter>
+    );
   }
 
-  // ✅ RESTORE SESSION ON PAGE LOAD
-  useEffect(() => {
-    fetch("http://localhost:30040/me", {
-      credentials: "include",
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.ok) {
-          setUser(data.user)
-          setView('app') // skip login if already logged in
-        } else {
-          setView('landing')
-        }
-      })
-      .catch(() => {
-        setView('landing')
-      })
-  }, [])
-
-  if (view === 'landing')
-    return <LandingPage onNavigate={navigate} />
-
-  if (view === 'login')
-    return (
-      <Login
-        onLogin={u => {
-          setUser(u)
-          setView('app')
-        }}
-        onNavigate={navigate}
-        toast={toast}
-      />
-    )
-
-  if (view === 'register')
-    return <Register onNavigate={navigate} />
-
+  // If logged in, every page gets the layout
   return (
-    <div style={{ padding: '2rem' }}>
-      Welcome, {user?.first_name}!
-    </div>
-  )
+    <BrowserRouter>
+      <AppLayout user={user} setUser={setUser}>
+        <Routes>
+          <Route path="/" element={<Home user={user} />} />
+          <Route path="/transactions" element={<Transactions user={user} />} />
+          
+         
+        </Routes>
+      </AppLayout>
+    </BrowserRouter>
+  );
 }

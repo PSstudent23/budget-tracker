@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router";
 
-export default function Register({ onNavigate }) {
+export default function Register({ setUser }) {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
+    monthly_income: "", // ✅ REQUIRED FIX
   });
 
   const [message, setMessage] = useState("");
@@ -23,8 +27,11 @@ export default function Register({ onNavigate }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.ok) onNavigate("login");
-        else setMessage(data.error);
+        if (data.ok) {
+          navigate("/login"); // ✅ replace onNavigate
+        } else {
+          setMessage(data.error);
+        }
       })
       .catch((err) => setMessage(err.message));
   };
@@ -65,11 +72,22 @@ export default function Register({ onNavigate }) {
       />
       <br />
 
+      {/* ✅ FIXED MISSING FIELD */}
+      <input
+        name="monthly_income"
+        type="number"
+        placeholder="Monthly Income"
+        onChange={handleChange}
+      />
+      <br />
+
       <button onClick={handleSubmit}>Register</button>
 
       <p>
         Already have an account?{" "}
-        <button onClick={() => onNavigate("login")}>Login</button>
+        <Link to="/login">
+          <button>Login</button>
+        </Link>
       </p>
     </div>
   );

@@ -1,14 +1,18 @@
-export default function LandingPage({ onNavigate }) {
+import { useNavigate } from "react-router";
+
+export default function LandingPage() {
+  const navigate = useNavigate();
+
   return (
     <div>
       <h1>Budget Tracker</h1>
       <p>Welcome to the application.</p>
 
-      <button onClick={() => onNavigate("login")}>
+      <button onClick={() => navigate("/login")}>
         Login
       </button>
 
-      <button onClick={() => onNavigate("register")}>
+      <button onClick={() => navigate("/register")}>
         Register
       </button>
     </div>
