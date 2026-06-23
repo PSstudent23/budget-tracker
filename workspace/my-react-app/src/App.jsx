@@ -6,14 +6,11 @@ import Register from "./Register";
 import AppLayout from "./components/AppLayout";
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
-
-/*
 import Budgets from "./pages/Budgets";
 import Goals from "./pages/Goals";
 import Simulator from "./pages/Simulator";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
-*/
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -49,8 +46,12 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home user={user} />} />
           <Route path="/transactions" element={<Transactions user={user} />} />
-          
-         
+          <Route path="/budgets" element={<Budgets user={user} />} />
+          <Route path="/goals" element={<Goals user={user} />} />
+          <Route path="/simulator" element={<Simulator user={user} />} />
+          <Route path="/notifications" element={<Notifications user={user} />} />
+          <Route path="/settings" element={<Settings user={user} setUser={setUser} />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>
