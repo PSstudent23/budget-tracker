@@ -1,26 +1,21 @@
 import { useNavigate, useLocation } from "react-router";
 import "../styles/AppLayout.css";
 
-export default function AppLayout({ children, user, setUser }) {
+export default function AppLayout({ children, user }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navItems = [
-    { label: "Home", path: "/" },
-    { label: "Transactions", path: "/transactions" },
-    { label: "Budgets", path: "/budgets" },
-    { label: "Goals", path: "/goals" },
-    { label: "Simulator", path: "/simulator" },
-  ];
-
-  const bottomItems = [
-    { label: "Notifications", path: "/notifications" },
-    { label: "Settings", path: "/settings" },
-  ];
-
   function handleLogout() {
-    fetch("http://localhost:30040/logout", { method: "POST", credentials: "include" })
-      .then(() => window.location.href = "/login");
+    fetch("http://localhost:30040/logout", {
+      method: "POST",
+      credentials: "include",
+    }).then(() => {
+      window.location.href = "/login";
+    });
+  }
+
+  function isActive(path) {
+    return location.pathname === path ? "nav-btn-active" : "";
   }
 
   return (
@@ -28,32 +23,42 @@ export default function AppLayout({ children, user, setUser }) {
       <aside className="sidebar">
         <div className="sidebar-header">
           <p className="sidebar-app-name">FinanceApp</p>
-          <p className="sidebar-user">{user?.first_name} {user?.last_name}</p>
+          <p className="sidebar-user">
+            {user?.first_name} {user?.last_name}
+          </p>
         </div>
 
-        <div className="sidebar-nav">
-          <p className="nav-label">MAIN</p>
-          {navItems.map(item => (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`nav-btn ${location.pathname === item.path ? "nav-btn-active" : ""}`}
-            >
-              {item.label}
-            </button>
-          ))}
+        <p className="nav-label">MAIN</p>
 
-          <p className="nav-label" style={{ marginTop: "8px" }}>OTHER</p>
-          {bottomItems.map(item => (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`nav-btn ${location.pathname === item.path ? "nav-btn-active" : ""}`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+        <button className={`nav-btn ${isActive("/")}`} onClick={() => navigate("/")}>
+          Home
+        </button>
+
+        <button className={`nav-btn ${isActive("/transactions")}`} onClick={() => navigate("/transactions")}>
+          Transactions
+        </button>
+
+        <button className={`nav-btn ${isActive("/budgets")}`} onClick={() => navigate("/budgets")}>
+          Budgets
+        </button>
+
+        <button className={`nav-btn ${isActive("/goals")}`} onClick={() => navigate("/goals")}>
+          Goals
+        </button>
+
+        <button className={`nav-btn ${isActive("/simulator")}`} onClick={() => navigate("/simulator")}>
+          Simulator
+        </button>
+
+        <p className="nav-label">OTHER</p>
+
+        <button className={`nav-btn ${isActive("/notifications")}`} onClick={() => navigate("/notifications")}>
+          Notifications
+        </button>
+
+        <button className={`nav-btn ${isActive("/settings")}`} onClick={() => navigate("/settings")}>
+          Settings
+        </button>
 
         <button className="logout-btn" onClick={handleLogout}>
           Log out

@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { useState, useEffect } from "react";
+
 import LandingPage from "./LandingPage";
 import Login from "./Login";
 import Register from "./Register";
+
 import AppLayout from "./components/AppLayout";
+
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
 import Budgets from "./pages/Budgets";
@@ -14,46 +17,44 @@ import Settings from "./pages/Settings";
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:30040/me", { credentials: "include" })
-      .then(res => res.json())
-      .then(data => setUser(data.ok ? data.user : null))
-      .finally(() => setLoading(false));
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost:30040/me", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (data.ok) setUser(data.user);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+    
+    fetchUser();
   }, []);
-
-  if (loading) return null;
-
-  // If not logged in, send to login
-  if (!user) {
-    return (
-      <BrowserRouter>
+  return (
+    <BrowserRouter>
+      {!user ? (
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
-      </BrowserRouter>
-    );
-  }
-
-  // If logged in, every page gets the layout
-  return (
-    <BrowserRouter>
-      <AppLayout user={user} setUser={setUser}>
-        <Routes>
-          <Route path="/" element={<Home user={user} />} />
-          <Route path="/transactions" element={<Transactions user={user} />} />
-          <Route path="/budgets" element={<Budgets user={user} />} />
-          <Route path="/goals" element={<Goals user={user} />} />
-          <Route path="/simulator" element={<Simulator user={user} />} />
-          <Route path="/notifications" element={<Notifications user={user} />} />
-          <Route path="/settings" element={<Settings user={user} setUser={setUser} />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </AppLayout>
+      ) : (
+        <AppLayout user={user} setUser={setUser}>
+          <Routes>
+            <Route path="/" element={<Home user={user} />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/budgets" element={<Budgets />} />
+            <Route path="/goals" element={<Goals />} />
+            <Route path="/simulator" element={<Simulator />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </AppLayout>
+      )}
     </BrowserRouter>
   );
 }
