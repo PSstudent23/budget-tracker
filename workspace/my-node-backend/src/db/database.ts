@@ -19,7 +19,7 @@ export interface UserLogin extends RowDataPacket {
   last_name: string;
   email: string;
   password: string;
-  monthly_income: number | null;
+  monthly_income: number;
 }
 
 export interface Transaction extends RowDataPacket {
@@ -30,13 +30,13 @@ export interface Transaction extends RowDataPacket {
   date: Date;
   description: string;
   created_at: Date;
-  goal_id: number | null;
+  goal_id: number;
 }
 
 //Login
 export const authUser = async (email: string): Promise<UserLogin[]> => {
   const [rows] = await pool.query<UserLogin[]>(
-    `SELECT user_id, first_name, last_name, email, password
+    `SELECT user_id, first_name, last_name, email, password, monthly_income
      FROM users
      WHERE email = ?`,
     [email]

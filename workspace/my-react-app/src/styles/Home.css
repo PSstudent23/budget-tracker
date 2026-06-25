@@ -1,75 +1,13 @@
-.dashboard {
-    display: flex;
-    min-height: 100vh;
-    background: #f3f4f6;
-}
-
-.title {
-    margin-bottom: "16px";
-    color: black;
-}
-
-
-
-.sidebar button:hover {
-background: #1f2937;
-}
-
-.sidebar-divider {
-height: 1px;
-background: #374151;
-margin: 10px 0;
-}
-
-.main-content {
-flex: 1;
-padding: 24px;
-}
-
-.stats-row {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 20px;
-margin-bottom: 20px;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .card {
-background: white;
-border-radius: 12px;
-height: 100px;
-display: flex;
-justify-content: center;
-align-items: center;
-}
-
-.banner-card {
-background: white;
-height: 60px;
-border-radius: 12px;
-margin-bottom: 20px;
-}
-
-.charts-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 20px;
-margin-bottom: 20px;
-}
-
-.chart-card {
-background: white;
-border-radius: 12px;
-height: 300px;
-}
-
-.bottom-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 20px;
-}
-
-.large-card {
-background: white;
-border-radius: 12px;
-height: 250px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
 }

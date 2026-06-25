@@ -7,6 +7,7 @@ declare module "express-session" {
       first_name: string;
       last_name: string;
       email: string;
+      monthly_income: number;
     };
   }
 }

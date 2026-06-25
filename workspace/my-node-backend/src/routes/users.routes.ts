@@ -51,6 +51,7 @@ const loginUser = async (
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        monthly_income: user.monthly_income
     };
 
     res.status(200).json({
@@ -60,7 +61,8 @@ const loginUser = async (
         user_id: user.user_id,        
         first_name: user.first_name,  
         last_name: user.last_name,
-        email: user.email,           
+        email: user.email, 
+        monthly_income: user.monthly_income
     },
     });
   } catch (error) {
@@ -89,7 +91,7 @@ const registerUser = async (
         last_name,
         email,
         password,
-        monthly_income ? Number(monthly_income) : null 
+        monthly_income
     );
 
     if (queryResult.affectedRows === 1) {
