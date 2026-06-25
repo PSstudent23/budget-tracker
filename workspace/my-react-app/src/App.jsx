@@ -27,7 +27,7 @@ export default function App() {
         const data = await res.json();
         if (data.ok) setUser(data.user);
       } catch (error) {
-        console.error("Failed to fetch user:", error);
+        //console.log("Failed to fetch user:", error);
       }
     };
     

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 
-
 const API_URL = "http://localhost:30040";
 
 export default function Login({ setUser }) {

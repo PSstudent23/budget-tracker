@@ -3,6 +3,13 @@ import { authUser, createUser } from "../db/database.js";
 
 const router = Router();
 
+//codes:
+//200 = OK
+//201 = Created
+//400 = Bad request
+//401 = Unautharized
+//500 = Internal server error
+
 //Login
 const loginUser = async (
     req: Request, 
@@ -82,7 +89,7 @@ const registerUser = async (
         last_name,
         email,
         password,
-        monthly_income ? Number(monthly_income) : null  // ← convert or null
+        monthly_income ? Number(monthly_income) : null 
     );
 
     if (queryResult.affectedRows === 1) {

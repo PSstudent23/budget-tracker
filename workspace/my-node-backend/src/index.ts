@@ -5,6 +5,7 @@ import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
 import usersRouter from "./routes/users.routes.js";
+import transactionsRouter from "./routes/transactions.routes.js";
 
 dotenv.config();
 
@@ -58,6 +59,9 @@ app.get("/", async (_req: Request, res: Response) => {
     if (conn) await conn.end();
   }
 });
+
+//Show Transactions
+app.use("/transactions", transactionsRouter);
 
 
 //Login and Register
