@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router";
 const API_URL = "http://localhost:30040";
 
 export default function Login({ setUser }) {
-  const [username, setUsername] = useState("");
+  const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
@@ -23,7 +23,7 @@ export default function Login({ setUser }) {
         },
         credentials: "include",
         body: JSON.stringify({
-          email: username,
+          email,
           password,
         })
       });

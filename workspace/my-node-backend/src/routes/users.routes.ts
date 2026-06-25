@@ -4,10 +4,11 @@ import { authUser, createUser } from "../db/database.js";
 const router = Router();
 
 //Login
-const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+const loginUser = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction) => {
   try {
-    //console.log("BODY:", req.body);           // check body is parsed
-    //console.log("SESSION BEFORE:", req.session); // check session exists
     const { email, password } = req.body as {
       email?: string;
       password?: string;
@@ -25,7 +26,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     if (queryResult.length === 0) {
       return res.status(401).json({
         success: false,
-        message: "User not found.",
+        message: "User is not registered.",
       });
     }
 
@@ -46,13 +47,14 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     };
 
     res.status(200).json({
-      success: true,
-      message: "Login successful.",
-      user: {
-        id: user.id,
-        username: user.user_name,
-        email: user.user_email,
-      },
+    success: true,
+    message: "Login successful.",
+    user: {
+        user_id: user.user_id,        
+        first_name: user.first_name,  
+        last_name: user.last_name,
+        email: user.email,           
+    },
     });
   } catch (error) {
     next(error);
@@ -76,11 +78,11 @@ const registerUser = async (
     }
 
     const queryResult = await createUser(
-      first_name,
-      last_name,
-      email,
-      password,
-      monthly_income
+        first_name,
+        last_name,
+        email,
+        password,
+        monthly_income ? Number(monthly_income) : null  // ← convert or null
     );
 
     if (queryResult.affectedRows === 1) {

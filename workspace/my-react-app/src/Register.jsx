@@ -4,36 +4,47 @@ import { useNavigate, Link } from "react-router";
 export default function Register({ setUser }) {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    monthly_income: "", 
-  });
-
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [monthly_income, setMonthlyIncome] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setMessage("");
 
-  const handleSubmit = () => {
-    fetch("http://localhost:30040/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.ok) {
-          navigate("/login"); 
-        } else {
-          setMessage(data.error);
-        }
-      })
-      .catch((err) => setMessage(err.message));
+    try {
+      const res = await fetch("http://localhost:30040/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          first_name,
+          last_name,
+          email,
+          password,
+          monthly_income
+        }),
+      });
+
+      const data = await res.json();
+
+      console.log("Register response:", data);
+
+      if (res.ok) {
+        setMessage("Registration successful.");
+        navigate("/login");
+      } else {
+        setMessage(data.message || "Registration failed.");
+      }
+    } catch (err) {
+      console.error("Register error:", err);
+      setMessage("Registration error. Please try again.");
+    }
   };
 
   return (
@@ -45,14 +56,14 @@ export default function Register({ setUser }) {
       <input
         name="first_name"
         placeholder="First Name"
-        onChange={handleChange}
+        onChange={(event) => setFirstName(event.target.value)}
       />
       <br />
 
       <input
         name="last_name"
         placeholder="Last Name"
-        onChange={handleChange}
+        onChange={(event) => setLastName(event.target.value)}
       />
       <br />
 
@@ -60,7 +71,7 @@ export default function Register({ setUser }) {
         name="email"
         type="email"
         placeholder="Email"
-        onChange={handleChange}
+        onChange={(event) => setEmail(event.target.value)}
       />
       <br />
 
@@ -68,7 +79,7 @@ export default function Register({ setUser }) {
         name="password"
         type="password"
         placeholder="Password"
-        onChange={handleChange}
+        onChange={(event) => setPassword(event.target.value)}
       />
       <br />
 
@@ -76,7 +87,7 @@ export default function Register({ setUser }) {
         name="monthly_income"
         type="number"
         placeholder="Monthly Income"
-        onChange={handleChange}
+        onChange={(event) => setMonthlyIncome(event.target.value)}
       />
       <br />
 
