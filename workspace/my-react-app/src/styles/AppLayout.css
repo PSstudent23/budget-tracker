@@ -5,14 +5,15 @@
 }
 
 .sidebar {
-  width: 200px;
-  background: #fff;
-  border-right: 1px solid #e5e7eb;
+  width: 250px;
+  background: #111827;
+  color: white;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  padding: 16px 8px;
+  gap: 10px;
 }
+
 
 .sidebar-header {
   padding: 0 8px 16px;

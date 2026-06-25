@@ -1,9 +1,10 @@
+import "../styles/Home.css";
 export default function Home({ user }) {
   return (
     <div>
-      <h2 class="title" >Welcome back, {user?.first_name} </h2>
+      <h2 className="title" >Welcome back, {user?.first_name} </h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "24px" }}>
+      <div className="" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "24px" }}>
         {[
           { label: "Monthly income", value: "€3,200" },
           { label: "Total spent", value: "€1,840" },

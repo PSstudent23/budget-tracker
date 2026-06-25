@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 
 import LandingPage from "./LandingPage";
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 import AppLayout from "./components/AppLayout";
 
