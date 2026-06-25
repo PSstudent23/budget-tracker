@@ -40,7 +40,7 @@ export const createUser = async (
   last_name: string,
   email: string,
   password: string,
-  monthly_income: string
+  monthly_income: number
 ): Promise<ResultSetHeader> => {
   const [result] = await pool.query<ResultSetHeader>(
     `INSERT INTO users (first_name, last_name, email, password, monthly_income)

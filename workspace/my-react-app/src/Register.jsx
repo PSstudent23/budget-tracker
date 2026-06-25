@@ -18,7 +18,7 @@ export default function Register({ setUser }) {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = () => {
-    fetch("http://localhost:30040/register", {
+    fetch("http://localhost:30040/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
