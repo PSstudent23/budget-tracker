@@ -9,7 +9,7 @@ export default function Register({ setUser }) {
     last_name: "",
     email: "",
     password: "",
-    monthly_income: "", // ✅ REQUIRED FIX
+    monthly_income: "", 
   });
 
   const [message, setMessage] = useState("");
@@ -18,7 +18,7 @@ export default function Register({ setUser }) {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = () => {
-    fetch("http://localhost:30040/users", {
+    fetch("http://localhost:30040/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export default function Register({ setUser }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.ok) {
-          navigate("/login"); // ✅ replace onNavigate
+          navigate("/login"); 
         } else {
           setMessage(data.error);
         }
@@ -72,7 +72,6 @@ export default function Register({ setUser }) {
       />
       <br />
 
-      {/* ✅ FIXED MISSING FIELD */}
       <input
         name="monthly_income"
         type="number"

@@ -19,7 +19,7 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    async function fetchUser() {
       try {
         const res = await fetch("http://localhost:30040/me", {
           credentials: "include",

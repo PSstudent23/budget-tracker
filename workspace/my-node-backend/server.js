@@ -1,3 +1,4 @@
+/*
 import session from "express-session";
 
 const express = require('express');
@@ -83,3 +84,4 @@ app.post('/login', async (req, res) => {
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on port ${port}`);
 });
+*/

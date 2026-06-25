@@ -1,24 +1,23 @@
+import "dotenv/config";
 import express, { Request, Response } from "express";
 import mysql from "mysql2/promise";
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
+import usersRouter from "./routes/users.routes.js";
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = Number(process.env.PORT) || 3000;
 
-/* ---------------- CORS ---------------- */
-app.use(
-  cors({
-    origin: "http://localhost:30041",
-    credentials: true,
-  })
-);
+// 1. CORS first
+app.use(cors({
+  origin: "http://localhost:30041",
+  credentials: true,
+}));
 
-/* ---------------- JSON ---------------- */
-app.use(express.json());
+// 2. Body parsers BEFORE session and routes
 
 /* ---------------- SESSION ---------------- */
 app.use(
@@ -34,6 +33,10 @@ app.use(
     },
   })
 );
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 
 /* ---------------- DB TEST ---------------- */
 app.get("/", async (_req: Request, res: Response) => {
@@ -56,76 +59,9 @@ app.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-/* ---------------- REGISTER ---------------- */
-app.post("/users", async (req: Request, res: Response) => {
-  const { first_name, last_name, email, password, monthly_income } = req.body;
 
-  let conn;
-
-  try {
-    conn = await mysql.createConnection(process.env.DATABASE_URL!);
-
-    const [result]: any = await conn.query(
-      `INSERT INTO users (first_name, last_name, email, password, monthly_income)
-       VALUES (?, ?, ?, ?, ?)`,
-      [first_name, last_name, email, password, monthly_income]
-    );
-
-    res.json({
-      ok: true,
-      user_id: result.insertId,
-    });
-  } catch (err) {
-    res.json({
-      ok: false,
-      error: (err as Error).message,
-    });
-  } finally {
-    if (conn) await conn.end();
-  }
-});
-
-/* ---------------- LOGIN ---------------- */
-app.post("/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  let conn;
-
-  try {
-    conn = await mysql.createConnection(process.env.DATABASE_URL!);
-
-    const [rows]: any = await conn.query(
-      `SELECT user_id, first_name, last_name, email
-       FROM users
-       WHERE email = ? AND password = ?`,
-      [email, password]
-    );
-
-    if (!rows || rows.length === 0) {
-      return res.json({
-        ok: false,
-        error: "Invalid email or password",
-      });
-    }
-
-    const user = rows[0];
-
-    /* ✅ STORE IN SESSION */
-    req.session.user = user;
-
-    res.json({
-      ok: true,
-      user,
-    });
-  } catch (err) {
-    res.json({
-      ok: false,
-      error: (err as Error).message,
-    });
-  } finally {
-    if (conn) await conn.end();
-  }
-});
+//Login and Register
+app.use("/users", usersRouter);
 
 /* ---------------- CHECK SESSION ---------------- */
 app.get("/me", (req: Request, res: Response) => {
@@ -154,7 +90,7 @@ app.post("/logout", (req: Request, res: Response) => {
   });
 });
 
-/* ---------------- START SERVER ---------------- */
+
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });

@@ -1,38 +1,46 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 
+
+const API_URL = "http://localhost:30040";
+
 export default function Login({ setUser }) {
-  const navigate = useNavigate();
-
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    fetch("http://localhost:30040/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(form),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.ok) {
-          setUser(data.user);
-          navigate("/app"); // go to dashboard
-        } else {
-          setMessage(data.error);
-        }
-      })
-      .catch((err) => setMessage(err.message));
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    setMessage("");
+
+    try {
+      const res = await fetch(`${API_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: username,
+          password,
+        })
+      });
+
+      const data = await res.json();
+      console.log("Login response:", data);
+
+      if (res.ok) {
+        setUser(data.user);
+    	  navigate("/");
+      } else {
+        setMessage(data.message || "Login failed.");
+      }
+    } catch (err) {
+      console.log("Login error:", err);
+      setMessage("Login error. Please try again.");
+    }
   };
 
   return (
@@ -45,7 +53,7 @@ export default function Login({ setUser }) {
         name="email"
         type="email"
         placeholder="Email"
-        onChange={handleChange}
+        onChange={(event) => setUsername(event.target.value)}
       />
       <br />
 
@@ -53,11 +61,11 @@ export default function Login({ setUser }) {
         name="password"
         type="password"
         placeholder="Password"
-        onChange={handleChange}
+        onChange={(event) => setPassword(event.target.value)}
       />
       <br />
 
-      <button onClick={handleSubmit}>Login</button>
+      <button onClick={handleLogin}>Login</button>
 
       <p>
         Don't have an account?{" "}
