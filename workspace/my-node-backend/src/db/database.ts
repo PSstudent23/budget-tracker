@@ -116,3 +116,20 @@ export const getBudgets = async (
 
   return rows;
 };
+
+export const addBudget = async (
+  user_id: number,
+  category_id: number,
+  start_date: number,
+  end_date: string,
+  budget_limit: number,
+  is_active: boolean
+): Promise<Transaction[]> => {
+   const [rows] = await pool.query<Transaction[]>(
+    `INSERT INTO budgets(user_id, category_id, start_date, end_date, budget_limit, is_active, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+    [user_id,category_id,start_date,end_date,budget_limit, is_active]
+  );
+
+  return rows;
+};

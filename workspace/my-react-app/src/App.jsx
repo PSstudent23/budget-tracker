@@ -15,6 +15,7 @@ import Goals from "./pages/Goals";
 import Simulator from "./pages/Simulator";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
+import AddBudgets from "./pages/AddBudgets";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/transactions/add" element={<AddTransaction />} />
             <Route path="/budgets" element={<Budgets />} />
+            <Route path="/budgets/add" element={<AddBudgets />} />
             <Route path="/goals" element={<Goals />} />
             <Route path="/simulator" element={<Simulator />} />
             <Route path="/notifications" element={<Notifications />} />

@@ -40,7 +40,7 @@ export default function AddTransaction() {
         setMessage(data.message || "Adding transaction failed.");
       }
     } catch (err) {
-      console.error("Register error:", err);
+      console.error("Transaction error:", err);
       setMessage("Error adding transaction");
     }
   };

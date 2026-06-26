@@ -33,6 +33,7 @@ export default function Budgets({ user }) {
         <p>Start: {item.start_date}</p>
         <p>End: {item.end_date}</p>
         <p>Limit: {item.budget_limit}</p>
+        <p>IsActive: {item.is_active}</p>
         <hr />
       </div>
   ))}

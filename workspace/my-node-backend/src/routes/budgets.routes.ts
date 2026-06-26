@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { getBudgets} from "../db/database.js";
+import { getBudgets, addBudget} from "../db/database.js";
 
 const router = Router();
 
@@ -24,8 +24,8 @@ const showBudgets = async (
   }
 };
 
-/*
-const createTransaction = async (
+
+const createBudget = async (
     req: Request, 
     res: Response, 
     next: NextFunction
@@ -38,35 +38,35 @@ const createTransaction = async (
       });
     }
 
-    const {category_id,amount,date,description,goal_id} = req.body;
+    const {category_id,start_date,end_date,budget_limit,is_active} = req.body;
 
     console.log({
       category_id,
-      amount,
-      date,
-      description,
-      goal_id,
+      start_date,
+      end_date,
+      budget_limit,
+      is_active,
     });
 
-     if (!category_id || !amount || !date) {
+     if (!category_id || !start_date || !end_date || !budget_limit) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
       });
     }
 
-    const result = await addTransaction(
+    const result = await addBudget(
       req.session.user.user_id,
       category_id,
-      amount,
-      date,
-      description,
-      goal_id ?? undefined
+      start_date,
+      end_date,
+      budget_limit,
+      is_active
     );
 
     return res.status(201).json({
       success: true,
-      message: "Transaction added"
+      message: "Budget created"
     });
 
 
@@ -74,8 +74,8 @@ const createTransaction = async (
         next(error);
     }
 }
-*/
+
 router.get("/show", showBudgets)
-//router.post("/add", createTransaction);
+router.post("/add", createBudget);
 
 export default router
