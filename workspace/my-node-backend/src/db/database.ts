@@ -33,6 +33,17 @@ export interface Transaction extends RowDataPacket {
   goal_id: number;
 }
 
+export interface Budgets extends RowDataPacket {
+  budget_id: number
+  user_id: number;
+  category_id: number;
+  start_date: string;
+  end_date: string;
+  budget_limit: string;
+  is_active: boolean;
+  created_at: string;
+}
+
 //Login
 export const authUser = async (email: string): Promise<UserLogin[]> => {
   const [rows] = await pool.query<UserLogin[]>(
@@ -89,6 +100,18 @@ export const addTransaction = async (
     `INSERT INTO transactions(user_id, category_id, amount, date, description, created_at, goal_id)
     VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
     [user_id,category_id,amount,date,description, goal_id]
+  );
+
+  return rows;
+};
+
+export const getBudgets = async (
+  user_id: number,
+  
+): Promise<Budgets[]> => {
+  const [rows] = await pool.query<Budgets[]>(
+    `SELECT * FROM budgets WHERE user_id = ?`,
+    [user_id]
   );
 
   return rows;

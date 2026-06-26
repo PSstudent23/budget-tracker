@@ -18,7 +18,7 @@ export default function Transactions({ user }) {
 
         setTransactions(data);
       } catch (err) {
-        console.log("Error loading news:", err);
+        console.log("Error loading transactions:", err);
       }
     }
 
