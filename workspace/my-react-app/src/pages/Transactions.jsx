@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 
 const API_URL = "http://localhost:30040";
 
 export default function Transactions({ user }) {
   const [transactions, setTransactions] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadTransactions() {
@@ -11,6 +13,7 @@ export default function Transactions({ user }) {
         const res = await fetch(`${API_URL}/transactions/show`, {
           credentials: "include",
         }); 
+
         const data = await res.json();
 
         setTransactions(data);
@@ -24,6 +27,7 @@ export default function Transactions({ user }) {
   return (
     <div>
       <h2>Transactions</h2>
+      <button className="addButton" onClick={() => navigate("/transactions/add")}>add Transaction</button>
      {transactions.map((item) => (
       <div key={item.transaction_id}>
         <p>Amount: {item.amount}</p>

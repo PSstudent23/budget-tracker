@@ -62,12 +62,33 @@ export const createUser = async (
   return result;
 };
 
+//Full texts
+//	transaction_id 	user_id 	category_id 	amount 	date 	description 	created_at 	goal_id 	
+
 export const getTransactions = async (
-  userId: number
+  user_id: number,
+  
 ): Promise<Transaction[]> => {
   const [rows] = await pool.query<Transaction[]>(
     `SELECT * FROM transactions WHERE user_id = ?`,
-    [userId]
+    [user_id]
+  );
+
+  return rows;
+};
+
+export const addTransaction = async (
+  user_id: number,
+  category_id: number,
+  amount: number,
+  date: string,
+  description: string,
+  goal_id: number | null
+): Promise<Transaction[]> => {
+   const [rows] = await pool.query<Transaction[]>(
+    `INSERT INTO transactions(user_id, category_id, amount, date, description, created_at, goal_id)
+    VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
+    [user_id,category_id,amount,date,description, goal_id]
   );
 
   return rows;

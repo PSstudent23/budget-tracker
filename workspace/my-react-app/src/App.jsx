@@ -9,6 +9,7 @@ import AppLayout from "./components/AppLayout";
 
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
+import AddTransaction from "./pages/AddTransaction";
 import Budgets from "./pages/Budgets";
 import Goals from "./pages/Goals";
 import Simulator from "./pages/Simulator";
@@ -47,6 +48,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home user={user} />} />
             <Route path="/transactions" element={<Transactions />} />
+            <Route path="/transactions/add" element={<AddTransaction />} />
             <Route path="/budgets" element={<Budgets />} />
             <Route path="/goals" element={<Goals />} />
             <Route path="/simulator" element={<Simulator />} />
