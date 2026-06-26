@@ -39,6 +39,14 @@ const createTransaction = async (
 
     const {category_id,amount,date,description,goal_id} = req.body;
 
+    console.log({
+      category_id,
+      amount,
+      date,
+      description,
+      goal_id,
+    });
+
      if (!category_id || !amount || !date) {
       return res.status(400).json({
         success: false,
@@ -46,13 +54,13 @@ const createTransaction = async (
       });
     }
 
-     const result = await addTransaction(
+    const result = await addTransaction(
       req.session.user.user_id,
       category_id,
       amount,
       date,
       description,
-      goal_id ?? null
+      goal_id ?? undefined
     );
 
     return res.status(201).json({
