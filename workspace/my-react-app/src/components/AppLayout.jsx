@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router";
 import "../styles/AppLayout.css";
 
-export default function AppLayout({ children, user }) {
+export default function AppLayout({ user, children }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,59 +15,54 @@ export default function AppLayout({ children, user }) {
   }
 
   function isActive(path) {
-    return location.pathname === path ? "nav-btn-active" : "";
+    return location.pathname === path ? "active" : "";
   }
 
   return (
     <div className="layout">
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <p className="sidebar-app-name">FinanceApp</p>
-          <p className="sidebar-user">
-            {user?.first_name} {user?.last_name}
-          </p>
-        </div>
+      <div className="sidebar">
+        <h3>Budget Tracker</h3>
 
-        <p className="nav-label">MAIN</p>
+        <p>
+          {user.first_name} {user.last_name}
+        </p>
 
-        <button className={`nav-btn ${isActive("/")}`} onClick={() => navigate("/")}>
+        <button className={isActive("/")} onClick={() => navigate("/")}>
           Home
         </button>
 
-        <button className={`nav-btn ${isActive("/transactions")}`} onClick={() => navigate("/transactions")}>
+        <button className={isActive("/transactions")} onClick={() => navigate("/transactions")}>
           Transactions
         </button>
 
-        <button className={`nav-btn ${isActive("/budgets")}`} onClick={() => navigate("/budgets")}>
+        <button className={isActive("/budgets")} onClick={() => navigate("/budgets")}>
           Budgets
         </button>
 
-        <button className={`nav-btn ${isActive("/goals")}`} onClick={() => navigate("/goals")}>
+        <button className={isActive("/goals")} onClick={() => navigate("/goals")}>
           Goals
         </button>
 
-        <button className={`nav-btn ${isActive("/simulator")}`} onClick={() => navigate("/simulator")}>
+        <button className={isActive("/simulator")} onClick={() => navigate("/simulator")}>
           Simulator
         </button>
 
-        <p className="nav-label">OTHER</p>
+        <hr />
 
-        <button className={`nav-btn ${isActive("/notifications")}`} onClick={() => navigate("/notifications")}>
+        <button className={isActive("/notifications")} onClick={() => navigate("/notifications") }>
           Notifications
         </button>
 
-        <button className={`nav-btn ${isActive("/settings")}`} onClick={() => navigate("/settings")}>
+        <button className={isActive("/settings")} onClick={() => navigate("/settings")}>
           Settings
         </button>
 
-        <button className="logout-btn" onClick={handleLogout}>
-          Log out
-        </button>
-      </aside>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
 
-      <main className="main-content">
+      <div className="main-content">
         {children}
-      </main>
+      </div>
     </div>
   );
 }

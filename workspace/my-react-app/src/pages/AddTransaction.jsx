@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 
+
 export default function AddTransaction() {
   const navigate = useNavigate();
 
@@ -49,7 +50,7 @@ export default function AddTransaction() {
     <div>
       <h1>Add Transaction</h1>
 
-      {message && <p>{message}</p>}
+      {message}
 
       <input
         type="number"

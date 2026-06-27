@@ -1,21 +1,23 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 
-import LandingPage from "./LandingPage";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import "../styles/App.css"
 
-import AppLayout from "./components/AppLayout";
+import LandingPage from "../LandingPage";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
-import Home from "./pages/Home";
-import Transactions from "./pages/Transactions";
-import AddTransaction from "./pages/AddTransaction";
-import Budgets from "./pages/Budgets";
-import Goals from "./pages/Goals";
-import Simulator from "./pages/Simulator";
-import Notifications from "./pages/Notifications";
-import Settings from "./pages/Settings";
-import AddBudgets from "./pages/AddBudgets";
+import AppLayout from "../components/AppLayout";
+
+import Home from "../pages/Home";
+import Transactions from "../pages/Transactions";
+import AddTransaction from "../pages/AddTransaction";
+import Budgets from "../pages/Budgets";
+import Goals from "../pages/Goals";
+import Simulator from "../pages/Simulator";
+import Notifications from "../pages/Notifications";
+import Settings from "../pages/Settings";
+import AddBudgets from "../pages/AddBudgets";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -26,10 +28,13 @@ export default function App() {
         const res = await fetch("http://localhost:30040/me", {
           credentials: "include",
         });
+        
         const data = await res.json();
-        if (data.ok) setUser(data.user);
+        if (data.ok) {
+          setUser(data.user)
+        };
       } catch (error) {
-        //console.log("Failed to fetch user:", error);
+        console.error("Auth check failed:", error);
       }
     };
     
@@ -42,7 +47,6 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       ) : (
         <AppLayout user={user} setUser={setUser}>

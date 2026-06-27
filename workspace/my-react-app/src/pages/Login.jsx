@@ -32,7 +32,7 @@ export default function Login({ setUser }) {
 
       if (res.ok) {
         setUser(data.user);
-    	  navigate("/");
+        navigate("/");
       } else {
         setMessage(data.message || "Login failed.");
       }
@@ -67,10 +67,8 @@ export default function Login({ setUser }) {
       <button onClick={handleLogin}>Login</button>
 
       <p>
-        Don't have an account?{" "}
-        <Link to="/register">
-          <button>Register</button>
-        </Link>
+        Register account{" "}
+        <button onClick={() => navigate("/register")}>Register</button>
       </p>
     </div>
   );
