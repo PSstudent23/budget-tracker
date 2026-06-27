@@ -7,6 +7,8 @@ export default function Transactions({ user }) {
   const [transactions, setTransactions] = useState([]);
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState("")
+
   useEffect(() => {
     async function loadTransactions() {
       try {
@@ -24,6 +26,32 @@ export default function Transactions({ user }) {
 
     loadTransactions();
   }, []);
+
+  const deleteTransaction = async (transaction_id) => {
+    try {
+      const res = await fetch("http://localhost:30040/transactions/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ transaction_id })
+      });
+      
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Transaction Deleted");
+        window.location.reload(); 
+      } else {
+        setMessage(data.message || "Deleting transaction failed.");
+      }
+    } catch (err) {
+      console.error("Transaction error:", err);
+      setMessage("Error deleting transaction");
+    }
+  };
 
   const uploadFile = async (transaction_id, file) => {
     if (!file) return;
@@ -71,6 +99,7 @@ export default function Transactions({ user }) {
           type="file"
           onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}
         />
+        <button onClick={() => deleteTransaction(item.transaction_id)}>X</button>
         <hr />
       </div>
   ))}

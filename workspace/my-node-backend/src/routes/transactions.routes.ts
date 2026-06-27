@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Request, Response, NextFunction, Router } from "express";
-import { getTransactions, addTransaction, getTransactionSum, addFile } from "../db/database.js";
+import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction } from "../db/database.js";
 
 const router = Router();
 
@@ -121,14 +121,40 @@ const addAttachment = async (
     });
   } catch (error) {
     next(error)
-  }
-  
+  } 
 }
+
+const deleteATransaction = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+) => {
+    try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const { transaction_id } = req.body;
+    const result = await deleteTransaction(Number(transaction_id));
+
+    return res.status(201).json({
+      success: true,
+      message: "Transaction Deleted"
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 router.get("/show", showTransactions)
 router.post("/add", createTransaction);
 router.get("/total", getTotal)
+router.delete("/delete", deleteATransaction)
 router.post("/upload", upload.single("file"), addAttachment);
 
 export default router

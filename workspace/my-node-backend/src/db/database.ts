@@ -130,6 +130,25 @@ export const addTransaction = async (
   return result;
 };
 
+export const deleteTransaction = async (
+    transaction_id: number
+): Promise<ResultSetHeader> => {
+
+  await pool.query(
+    "DELETE FROM attachment WHERE transaction_id = ?",
+    [transaction_id]
+  );
+
+
+  const [result] = await pool.query<ResultSetHeader>(
+    `DELETE FROM transactions WHERE transaction_id = ?`,
+    [transaction_id]
+  );
+
+  return result;
+};
+
+
 export const getBudgets = async (
   user_id: number,
   
@@ -161,13 +180,13 @@ export const addBudget = async (
 
 export const deleteBudget = async (
     budget_id: number
-): Promise<ResultSetHeader > => {
-  const [rows] = await pool.query<ResultSetHeader>(
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
     `DELETE FROM budgets WHERE budget_id = ?`,
     [budget_id]
   );
 
-  return rows;
+  return result;
 };
 
 export const getGoals = async (
@@ -194,6 +213,17 @@ export const addGoal = async (
     `INSERT INTO goals(user_id, name, target_amount, current_amount, target_date, status, priority, created_at)
     VALUES (?, ?, ?, 0, ?, ?, ?, NOW())`,
     [user_id,name,target_amount,target_date, status, priority]
+  );
+
+  return result;
+};
+
+export const deleteGoal = async (
+    goal_id: number
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `DELETE FROM goals WHERE goal_id = ?`,
+    [goal_id]
   );
 
   return result;
