@@ -48,6 +48,7 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" element={<LandingPage />} />
         </Routes>
       ) : (
         <AppLayout user={user} setUser={setUser}>
@@ -61,7 +62,7 @@ export default function App() {
             <Route path="/goals/add" element={<AddGoal />} />
             <Route path="/simulator" element={<Simulator />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<Settings user={user} />} />
           </Routes>
         </AppLayout>
       )}

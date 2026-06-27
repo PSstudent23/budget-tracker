@@ -5,13 +5,20 @@ export default function AppLayout({ user, children }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  function handleLogout() {
-    fetch("http://localhost:30040/logout", {
+  async function handleLogout() {
+    const res = await fetch("http://localhost:30040/logout", {
       method: "POST",
       credentials: "include",
-    }).then(() => {
-      window.location.href = "/login";
-    });
+    })
+    
+    const data = await res.json();
+
+    if (res.ok) {
+      navigate("/login");
+      window.location.reload(); 
+    } else {
+      setMessage(data.message || "Logout failed.");
+    }
   }
 
   function isActive(path) {

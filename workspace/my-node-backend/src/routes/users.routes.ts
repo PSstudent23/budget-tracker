@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction, Router } from "express";
-import { authUser, createUser } from "../db/database.js";
+import e, { Request, Response, NextFunction, Router } from "express";
+import { authUser, createUser, checkPassword, updateUser } from "../db/database.js";
 
 const router = Router();
 
@@ -129,8 +129,61 @@ const getCurrentUser = (
   });
 };
 
+
+const update = async (req: Request, res: Response) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const { first_name, last_name,email, monthly_income, current_password, new_password } = req.body;
+
+    if (!first_name || !last_name || !email || !monthly_income || !current_password) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields"
+      });
+    }
+
+    const rows = await checkPassword(req.session.user.user_id);
+
+    if (rows[0].password !== current_password) {
+      return res.status(401).json({
+        success: false,
+        message: "Wrong password"
+      });
+    }
+
+    await updateUser(
+      req.session.user.user_id,
+      first_name,
+      last_name,
+      email,
+      monthly_income,
+      new_password || rows[0].password
+    );
+
+    return res.json({
+      success: true,
+      message: "User updated"
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
+
+
 router.post("/login", loginUser);
 router.post("/register", registerUser);
 router.get("/me", getCurrentUser);
+router.post("/update", update);
 
 export default router;

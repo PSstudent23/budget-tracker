@@ -105,14 +105,14 @@ export const addTransaction = async (
   date: string,
   description: string,
   goal_id: number | null
-): Promise<Transaction[]> => {
-   const [rows] = await pool.query<Transaction[]>(
+): Promise<ResultSetHeader> => {
+   const [result] = await pool.query<ResultSetHeader>(
     `INSERT INTO transactions(user_id, category_id, amount, date, description, created_at, goal_id)
     VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
     [user_id,category_id,amount,date,description, goal_id]
   );
 
-  return rows;
+  return result;
 };
 
 export const getBudgets = async (
@@ -134,14 +134,14 @@ export const addBudget = async (
   end_date: string,
   budget_limit: number,
   is_active: boolean
-): Promise<Transaction[]> => {
-   const [rows] = await pool.query<Transaction[]>(
+): Promise<ResultSetHeader> => {
+   const [result] = await pool.query<ResultSetHeader>(
     `INSERT INTO budgets(user_id, category_id, start_date, end_date, budget_limit, is_active, created_at)
     VALUES (?, ?, ?, ?, ?, ?, NOW())`,
     [user_id,category_id,start_date,end_date,budget_limit, is_active]
   );
 
-  return rows;
+  return result;
 };
 
 export const getGoals = async (
@@ -163,12 +163,41 @@ export const addGoal = async (
   target_date: string,
   status: "not_started" | "in_progress" | "behind" | "completed",
   priority: number,
-): Promise<Goal[]> => {
-   const [rows] = await pool.query<Goal[]>(
+): Promise<ResultSetHeader> => {
+   const [result] = await pool.query<ResultSetHeader>(
     `INSERT INTO goals(user_id, name, target_amount, current_amount, target_date, status, priority, created_at)
     VALUES (?, ?, ?, 0, ?, ?, ?, NOW())`,
     [user_id,name,target_amount,target_date, status, priority]
   );
 
+  return result;
+};
+
+
+export const checkPassword = async (
+  user_id: number,
+): Promise<UserLogin[]> => {
+  const [rows] = await pool.query<UserLogin[]>(
+    `SELECT password FROM users WHERE user_id = ?`,
+    [user_id]
+  );
+
   return rows;
+};
+
+export const updateUser = async (
+  user_id: number,
+  first_name: string,
+  last_name: string,
+  email: string,
+  monthly_income: number,
+  password: string
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `UPDATE users SET first_name = ?, last_name = ?, email = ?, monthly_income = ?, password = ?
+     WHERE user_id = ?`,
+    [first_name, last_name, email, monthly_income, password, user_id]
+  );
+
+  return result;
 };
