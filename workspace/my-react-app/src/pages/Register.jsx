@@ -94,8 +94,10 @@ export default function Register({ setUser }) {
       <button onClick={handleSubmit}>Register</button>
 
       <p>
-        Login with your account{" "}
-        <button onClick={() => navigate("/login")}>Login</button>
+        Already have an account?{" "}
+        <Link to="/login">
+          <button>Login</button>
+        </Link>
       </p>
     </div>
   );
