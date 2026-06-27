@@ -48,7 +48,7 @@ export default function AddBudgets() {
     <div>
       <h1>Add Budget</h1>
 
-      {message}
+      {message }
 
       <input
         type="number"
