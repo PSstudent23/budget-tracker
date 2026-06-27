@@ -73,9 +73,6 @@ export const createUser = async (
   return result;
 };
 
-//Full texts
-//	transaction_id 	user_id 	category_id 	amount 	date 	description 	created_at 	goal_id 	
-
 export const getTransactions = async (
   user_id: number,
   
