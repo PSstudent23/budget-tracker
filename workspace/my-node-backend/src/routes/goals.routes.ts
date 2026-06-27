@@ -40,16 +40,6 @@ const createGoals = async (
 
     const {name,target_amount,target_date,status,priority,created_at,completed_at} = req.body;
 
-    console.log({
-        name,
-        target_amount,
-        target_date,
-        status,
-        priority,
-        created_at,
-        completed_at
-    });
-
      if (!name || !target_amount || !target_date || !priority) {
       return res.status(400).json({
         success: false,

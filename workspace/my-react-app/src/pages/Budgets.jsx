@@ -7,6 +7,8 @@ export default function Budgets({ user }) {
   const [budgets, setBudgets] = useState([]);
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState("")
+
   useEffect(() => {
     async function loadBudgets() {
       try {
@@ -24,16 +26,46 @@ export default function Budgets({ user }) {
 
     loadBudgets();
   }, []);
+
+
+  const deleteBudget = async (budget_id) => {
+    try {
+      const res = await fetch("http://localhost:30040/budgets/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ budget_id })
+      });
+      
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Budget Deleted");
+        window.location.reload(); 
+      } else {
+        setMessage(data.message || "Adding transaction failed.");
+      }
+    } catch (err) {
+      console.error("Transaction error:", err);
+      setMessage("Error adding transaction");
+    }
+  };
+
   return (
     <div>
       <h2>Budgets</h2>
       <button className="addButton" onClick={() => navigate("/budgets/add")}>add Budget</button>
      {budgets.map((item) => (
       <div key={item.budget_id}>
+        <p>budgetId" {item.budget_id}</p>
         <p>Start: {item.start_date}</p>
         <p>End: {item.end_date}</p>
         <p>Limit: {item.budget_limit}</p>
         <p>IsActive: {item.is_active}</p>
+        <button onClick={() => deleteBudget(item.budget_id)}>X</button>
         <hr />
       </div>
   ))}

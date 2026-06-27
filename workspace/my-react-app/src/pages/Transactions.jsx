@@ -24,6 +24,36 @@ export default function Transactions({ user }) {
 
     loadTransactions();
   }, []);
+
+  const uploadFile = async (transaction_id, file) => {
+    if (!file) return;
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+    formData.append("transaction_id", transaction_id);
+
+  try {
+    const res = await fetch("http://localhost:30040/transactions/upload", {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log("File uploaded!");
+    } else {
+      console.error(data.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+
+  }
+
   return (
     <div>
       <h2>Transactions</h2>
@@ -33,6 +63,14 @@ export default function Transactions({ user }) {
         <p>Amount: {item.amount}</p>
         <p>Description: {item.description}</p>
         <p>Date: {item.date}</p>
+        <p>Created: {item.created_at}</p>
+        <p>Goal: {item.goal_id}</p>
+        <p>Category: {item.category_name}</p>
+        <p>FileName: {item.filename}</p>
+        <input
+          type="file"
+          onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}
+        />
         <hr />
       </div>
   ))}

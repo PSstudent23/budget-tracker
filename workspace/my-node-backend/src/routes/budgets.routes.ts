@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { getBudgets, addBudget} from "../db/database.js";
+import { getBudgets, addBudget, deleteBudget} from "../db/database.js";
 
 const router = Router();
 
@@ -40,14 +40,6 @@ const createBudget = async (
 
     const {category_id,start_date,end_date,budget_limit,is_active} = req.body;
 
-    console.log({
-      category_id,
-      start_date,
-      end_date,
-      budget_limit,
-      is_active,
-    });
-
      if (!category_id || !start_date || !end_date || !budget_limit) {
       return res.status(400).json({
         success: false,
@@ -75,7 +67,35 @@ const createBudget = async (
     }
 }
 
+const deleteABudget = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+) => {
+    try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const { budget_id } = req.body;
+    const result = await deleteBudget(Number(budget_id));
+
+    return res.status(201).json({
+      success: true,
+      message: "Budget Deleted"
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 router.get("/show", showBudgets)
 router.post("/add", createBudget);
+router.delete("/delete", deleteABudget)
 
 export default router

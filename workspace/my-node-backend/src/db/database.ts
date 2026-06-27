@@ -26,11 +26,22 @@ export interface Transaction extends RowDataPacket {
   transaction_id: number;
   user_id: number;
   category_id: number;
+  category_name: string;
   amount: number;
   date: Date;
   description: string;
   created_at: Date;
   goal_id: number;
+
+  attachment: Attachment | null;
+}
+
+export interface Attachment extends RowDataPacket {
+  attachment_id: number;
+  transaction_id: number;
+  filename: string;
+  file_type: string;
+  uploaded_at: Date;
 }
 
 export interface Budget extends RowDataPacket {
@@ -91,7 +102,11 @@ export const getTransactions = async (
   
 ): Promise<Transaction[]> => {
   const [rows] = await pool.query<Transaction[]>(
-    `SELECT * FROM transactions WHERE user_id = ?`,
+    `SELECT t.*, c.name AS category_name, a.attachment_id, a.filename
+    FROM transactions t
+    JOIN categories c ON t.category_id = c.category_id
+    LEFT JOIN attachment a ON a.transaction_id = t.transaction_id
+    WHERE t.user_id = ?`,
     [user_id]
   );
 
@@ -142,6 +157,17 @@ export const addBudget = async (
   );
 
   return result;
+};
+
+export const deleteBudget = async (
+    budget_id: number
+): Promise<ResultSetHeader > => {
+  const [rows] = await pool.query<ResultSetHeader>(
+    `DELETE FROM budgets WHERE budget_id = ?`,
+    [budget_id]
+  );
+
+  return rows;
 };
 
 export const getGoals = async (
@@ -211,4 +237,21 @@ export const getTransactionSum = async (
   );
 
   return rows[0].total || 0;
+};
+
+export const addFile = async (
+  user_id: number,
+  transaction_id: number,
+  filename: string,
+  file_type: string,
+  file_data: Buffer
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `INSERT INTO attachment 
+     (user_id, transaction_id, filename, file_type, file_data, uploaded_at)
+     VALUES (?, ?, ?, ?, ?, NOW())`,
+    [user_id, transaction_id, filename, file_type, file_data]
+  );
+
+  return result;
 };
