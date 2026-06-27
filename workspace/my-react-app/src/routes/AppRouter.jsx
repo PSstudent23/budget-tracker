@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 
-import "../styles/App.css"
+//  import "../styles/App.css"
 
 import LandingPage from "../LandingPage";
 import Login from "../pages/Login";
@@ -18,6 +18,7 @@ import Simulator from "../pages/Simulator";
 import Notifications from "../pages/Notifications";
 import Settings from "../pages/Settings";
 import AddBudgets from "../pages/AddBudgets";
+import AddGoal from "../pages/AddGoal";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="/budgets" element={<Budgets />} />
             <Route path="/budgets/add" element={<AddBudgets />} />
             <Route path="/goals" element={<Goals />} />
+            <Route path="/goals/add" element={<AddGoal />} />
             <Route path="/simulator" element={<Simulator />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/settings" element={<Settings />} />

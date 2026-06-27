@@ -33,7 +33,7 @@ export interface Transaction extends RowDataPacket {
   goal_id: number;
 }
 
-export interface Budgets extends RowDataPacket {
+export interface Budget extends RowDataPacket {
   budget_id: number
   user_id: number;
   category_id: number;
@@ -42,6 +42,19 @@ export interface Budgets extends RowDataPacket {
   budget_limit: string;
   is_active: boolean;
   created_at: string;
+}
+
+export interface Goal extends RowDataPacket {
+  goal_id: number;
+  user_id: number;
+  name: string;
+  target_amount: number;
+  current_amount: number;
+  target_date: string;
+  status: "not_started" | "in_progress" | "behind" | "completed";
+  priority: number;
+  created_at: string;
+  completed_at: string;
 }
 
 //Login
@@ -105,8 +118,8 @@ export const addTransaction = async (
 export const getBudgets = async (
   user_id: number,
   
-): Promise<Budgets[]> => {
-  const [rows] = await pool.query<Budgets[]>(
+): Promise<Budget[]> => {
+  const [rows] = await pool.query<Budget[]>(
     `SELECT * FROM budgets WHERE user_id = ?`,
     [user_id]
   );
@@ -126,6 +139,35 @@ export const addBudget = async (
     `INSERT INTO budgets(user_id, category_id, start_date, end_date, budget_limit, is_active, created_at)
     VALUES (?, ?, ?, ?, ?, ?, NOW())`,
     [user_id,category_id,start_date,end_date,budget_limit, is_active]
+  );
+
+  return rows;
+};
+
+export const getGoals = async (
+  user_id: number,
+  
+): Promise<Goal[]> => {
+  const [rows] = await pool.query<Goal[]>(
+    `SELECT * FROM goals WHERE user_id = ?`,
+    [user_id]
+  );
+
+  return rows;
+};
+
+export const addGoal = async (
+  user_id: number,
+  name: string,
+  target_amount: number,
+  target_date: string,
+  status: "not_started" | "in_progress" | "behind" | "completed",
+  priority: number,
+): Promise<Goal[]> => {
+   const [rows] = await pool.query<Goal[]>(
+    `INSERT INTO goals(user_id, name, target_amount, current_amount, target_date, status, priority, created_at)
+    VALUES (?, ?, ?, 0, ?, ?, ?, NOW())`,
+    [user_id,name,target_amount,target_date, status, priority]
   );
 
   return rows;

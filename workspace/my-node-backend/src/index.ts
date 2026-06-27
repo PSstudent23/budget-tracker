@@ -7,21 +7,20 @@ import dotenv from "dotenv";
 import usersRouter from "./routes/users.routes.js";
 import transactionsRouter from "./routes/transactions.routes.js";
 import budgetsRouter from "./routes/budgets.routes.js";
+import goalsRouter from "./routes/goals.routes.js";
+
 
 dotenv.config();
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
-// 1. CORS first
 app.use(cors({
   origin: "http://localhost:30041",
   credentials: true,
 }));
 
-// 2. Body parsers BEFORE session and routes
 
-/* ---------------- SESSION ---------------- */
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "temporary-development-secret",
@@ -40,7 +39,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-/* ---------------- DB TEST ---------------- */
 app.get("/", async (_req: Request, res: Response) => {
   let conn;
 
@@ -66,11 +64,11 @@ app.use("/transactions", transactionsRouter);
 
 app.use("/budgets", budgetsRouter)
 
+app.use("/goals", goalsRouter)
 
 //Login and Register
 app.use("/users", usersRouter);
 
-/* ---------------- CHECK SESSION ---------------- */
 app.get("/me", (req: Request, res: Response) => {
   if (!req.session.user) {
     return res.status(401).json({
@@ -84,7 +82,6 @@ app.get("/me", (req: Request, res: Response) => {
   });
 });
 
-/* ---------------- LOGOUT ---------------- */
 app.post("/logout", (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) {
