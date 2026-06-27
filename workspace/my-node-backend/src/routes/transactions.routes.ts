@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { getTransactions, addTransaction } from "../db/database.js";
+import { getTransactions, addTransaction, getTransactionSum } from "../db/database.js";
 
 const router = Router();
 
@@ -74,7 +74,19 @@ const createTransaction = async (
     }
 }
 
+const getTotal = async (req: Request, res: Response) => {
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Not logged in" });
+  }
+
+  const total = await getTransactionSum(req.session.user.user_id);
+
+  res.json({ total });
+};
+
+
 router.get("/show", showTransactions)
 router.post("/add", createTransaction);
+router.get("/total", getTotal)
 
 export default router

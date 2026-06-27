@@ -201,3 +201,14 @@ export const updateUser = async (
 
   return result;
 };
+
+export const getTransactionSum = async (
+  user_id: number
+): Promise<number> => {
+  const [rows] = await pool.query<any[]>(
+    `SELECT SUM(amount) AS total FROM transactions WHERE user_id = ?`,
+    [user_id]
+  );
+
+  return rows[0].total || 0;
+};

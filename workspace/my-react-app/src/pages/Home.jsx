@@ -1,6 +1,29 @@
+import { useState, useEffect } from "react";
 import "../styles/Home.css";
 
+const API_URL = "http://localhost:30040";
+
 export default function Home({ user }) {
+  const [sum, setSum] = useState(0)
+
+  useEffect(() => {
+      async function getTransactionSum() {
+        try {
+          const res = await fetch(`${API_URL}/transactions/total`, {
+            credentials: "include",
+          }); 
+  
+          const data = await res.json();
+  
+          setSum(data.total);
+        } catch (err) {
+          console.log("Error loading budgets:", err);
+        }
+      }
+  
+      getTransactionSum();
+    }, []);
+
   return (
     <div>
       <h2>User: {user?.first_name}</h2>
@@ -13,12 +36,12 @@ export default function Home({ user }) {
 
         <div className="card">
           <p>Total spent</p>
-          <h3>€1,840</h3>
+          <h3>{sum}</h3>
         </div>
 
          <div className="card">
           <p>Remaining</p>
-          <h3>€{user ? user.monthly_income - 1840 : 0}</h3>
+          <h3>€{user ? user.monthly_income - sum : 0}</h3>
         </div>
 
         <div className="card">
