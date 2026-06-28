@@ -66,27 +66,53 @@ export default function Transactions({ user }) {
     formData.append("file", file);
     formData.append("transaction_id", transaction_id);
 
-  try {
-    const res = await fetch("http://localhost:30040/transactions/upload", {
-      method: "POST",
-      credentials: "include",
-      body: formData,
-    });
+    try {
+      const res = await fetch("http://localhost:30040/transactions/upload", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      console.log("File uploaded!");
-      window.location.reload(); 
-    } else {
-      setMessage(data.message)
-      console.error(data.message);
+      if (res.ok) {
+        console.log("File uploaded!");
+        window.location.reload(); 
+      } else {
+        setMessage(data.message)
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
   }
 
+  const deleteFile = async (attachment_id) => {
+    console.log("test" + attachment_id)
+    try {
+      const res = await fetch("http://localhost:30040/transactions/deleteFile", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ attachment_id })
+      });
 
+      const data = await res.json();
+
+      console.log(data)
+
+      if (res.ok) {
+        setMessage("File Deleted");
+        window.location.reload(); 
+      } else {
+        setMessage(data.message || "Deleting File failed.");
+      }
+
+    } catch (err) {
+      console.error("File error:", err);
+    }
   }
 
   return (
@@ -96,25 +122,26 @@ export default function Transactions({ user }) {
 
       {message}
 
-     {transactions.map((item) => (
-      <div key={item.transaction_id}>
-        <p>Amount: {item.amount}</p>
-        <p>Description: {item.description}</p>
-        <p>Date: {item.date}</p>
-        <p>Created: {item.created_at}</p>
-        <p>Goal: {item.goal_name}</p>
-        <p>Category: {item.category_name}</p>
-        <p>Category type: {item.category_type}</p>
-        <p>FileName: {item.filename}</p>
+      {transactions.map((item) => (
+        <div key={item.transaction_id}>
+          <p>Amount: {item.amount}</p>
+          <p>Description: {item.description}</p>
+          <p>Date: {item.date}</p>
+          <p>Created: {item.created_at}</p>
+          <p>Goal: {item.goal_name}</p>
+          <p>Category: {item.category_name}</p>
+          <p>Category type: {item.category_type}</p>
+          <p>FileName: {item.filename}</p>
+          <p>File ID: {item.attachment_id}</p>
 
-
-        <input
-          type="file"
-          onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}
-        />
-        <button onClick={() => deleteTransaction(item.transaction_id)}>X</button>
-        <hr />
-      </div>
+          <input
+            type="file"
+            onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}
+          />
+          <button onClick={() => deleteTransaction(item.transaction_id)}>X</button>
+          <button onClick={() => deleteFile(item.attachment_id)}>X: attachment</button>
+          <hr />
+        </div>
   ))}
     </div>
   );

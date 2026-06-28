@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Request, Response, NextFunction, Router } from "express";
-import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction } from "../db/database.js";
+import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction, deleteFile } from "../db/database.js";
 
 const router = Router();
 
@@ -132,6 +132,34 @@ const addAttachment = async (
   } 
 }
 
+const deleteAttachment = async (
+  req: Request, 
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const { attachment_id } = req.body;
+    const result = await deleteFile(attachment_id);
+
+    
+    return res.status(201).json({
+      success: true,
+      message: "File deleted"
+    });
+
+
+  } catch (error) {
+    next(error)
+  }
+}
+
 const deleteATransaction = async (
     req: Request, 
     res: Response, 
@@ -173,5 +201,6 @@ router.post("/add", createTransaction);
 router.get("/total", getTotal)
 router.delete("/delete", deleteATransaction)
 router.post("/upload", upload.single("file"), addAttachment);
+router.delete("/deleteFile", deleteAttachment);
 
 export default router
