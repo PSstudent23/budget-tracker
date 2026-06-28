@@ -110,9 +110,12 @@ export const getTransactions = async (
     JOIN categories c ON t.category_id = c.category_id
     LEFT JOIN goals g ON t.goal_id = g.goal_id
     LEFT JOIN attachment a ON a.transaction_id = t.transaction_id
-    WHERE t.user_id = ?`,
+    WHERE t.user_id = ?
+    ORDER BY t.transaction_id DESC`,
     [user_id]
   );
+
+  console.log(rows)
 
   return rows;
 };
@@ -325,11 +328,34 @@ export const addFile = async (
   file_type: string,
   file_data: Buffer
 ): Promise<ResultSetHeader> => {
+  const [rows] = await pool.query<Attachment[]>(
+    `SELECT attachment_id
+     FROM attachment
+     WHERE transaction_id = ?`,
+    [transaction_id]
+  );
+
+  if (rows.length > 0) {
+    await deleteFile(rows[0].attachment_id);
+  }
+
   const [result] = await pool.query<ResultSetHeader>(
     `INSERT INTO attachment 
      (user_id, transaction_id, filename, file_type, file_data, uploaded_at)
      VALUES (?, ?, ?, ?, ?, NOW())`,
     [user_id, transaction_id, filename, file_type, file_data]
+  );
+
+  return result;
+};
+
+export const deleteFile = async (
+  attachment_id: number
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `DELETE FROM attachment
+     WHERE attachment_id = ?`,
+    [attachment_id]
   );
 
   return result;

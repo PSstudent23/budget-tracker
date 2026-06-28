@@ -59,6 +59,7 @@ export default function Goals({ user }) {
     navigate("/transactions/add", {
       state: {
         goal_id: goal_id,
+        category_id: 16
       }
     })
   }  
@@ -73,8 +74,7 @@ export default function Goals({ user }) {
         const target = new Date(item.target_date);
 
         const dif =  (target.getFullYear() - today.getFullYear()) * 12 + (target.getMonth() - today.getMonth())
-
-        console.log( dif );
+        const perMonth = item.target_amount / dif;
 
 
         return (
@@ -86,6 +86,7 @@ export default function Goals({ user }) {
             <p>Target Date: {item.target_date}</p>
 
             <p>Months left: {dif}</p>
+            <p>Per month to reach: {perMonth}</p>
 
             <button onClick={() => AddToGoal(item.goal_id)}>
               Add money to goal

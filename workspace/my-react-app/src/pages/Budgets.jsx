@@ -30,7 +30,7 @@ export default function Budgets({ user }) {
 
   const deleteBudget = async (budget_id) => {
     try {
-      const res = await fetch("http://localhost:30040/budgets/delete", {
+      const res = await fetch(`${API_URL}/budgets/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

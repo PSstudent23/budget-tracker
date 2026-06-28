@@ -26,6 +26,8 @@ export default function Transactions({ user }) {
       }
     }
 
+    
+
     loadTransactions();
   }, []);
 
@@ -75,7 +77,9 @@ export default function Transactions({ user }) {
 
     if (res.ok) {
       console.log("File uploaded!");
+      window.location.reload(); 
     } else {
+      setMessage(data.message)
       console.error(data.message);
     }
   } catch (error) {
@@ -89,6 +93,9 @@ export default function Transactions({ user }) {
     <div>
       <h2>Transactions</h2>
       <button className="addButton" onClick={() => navigate("/transactions/add")}>add Transaction</button>
+
+      {message}
+
      {transactions.map((item) => (
       <div key={item.transaction_id}>
         <p>Amount: {item.amount}</p>
@@ -99,6 +106,8 @@ export default function Transactions({ user }) {
         <p>Category: {item.category_name}</p>
         <p>Category type: {item.category_type}</p>
         <p>FileName: {item.filename}</p>
+
+
         <input
           type="file"
           onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}

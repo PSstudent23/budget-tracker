@@ -6,11 +6,11 @@ export default function AddTransaction() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [category_id, setCategory] = useState("");
+  const [category_id, setCategory] = useState(location.state?.category_id ? location.state.category_id : "");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
-  const [goal_id, setGoalId] = useState(location.state.goal_id);
+  const [goal_id, setGoalId] = useState(location.state?.goal_id ? location.state.goal_id : "");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (event) => {
@@ -29,7 +29,7 @@ export default function AddTransaction() {
           amount,
           date,
           description,
-          goal_id: goal_id ? Number(goal_id) : null
+          goal_id: goal_id ? Number(goal_id) : undefined
         }),
       });
 
@@ -46,11 +46,13 @@ export default function AddTransaction() {
     }
   };
 
+  const isGoalTransaction = location.state?.goal_id != null;
+
   return (
     <div>
       <h1>Add Transaction</h1>
 
-      {message}
+      {message} 
 
       <input
         type="number"
@@ -84,12 +86,17 @@ export default function AddTransaction() {
       />
       <br />
 
-      <input
-        type="number"
-        placeholder="Goal ID (optional)"
-        value={goal_id}
-        onChange={(e) => setGoal(e.target.value)}
-      />
+      {!isGoalTransaction && (
+        <>
+          <input
+            type="number"
+            placeholder="Goal ID (optional)"
+            value={goal_id}
+            onChange={(e) => setGoalId(e.target.value)}
+          />
+          <br />
+        </>
+      )}
       <br />
 
       <button onClick={handleSubmit}>Add Transaction</button>

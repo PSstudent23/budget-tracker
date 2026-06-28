@@ -59,6 +59,8 @@ const createTransaction = async (
       goal_id ?? undefined
     );
 
+    console.log(result)
+
     if (goal_id) {
       await updateGoalAmount(goal_id, amount);
     }
