@@ -117,6 +117,17 @@ export const getTransactions = async (
   return rows;
 };
 
+export const getTransaction = async (
+  transaction_id: number
+): Promise<Transaction[]> => {
+  const [rows] = await pool.query<Transaction[]>(
+    `SELECT * FROM transactions WHERE transaction_id = ?`,
+    [transaction_id]
+  );
+
+  return rows;
+};
+
 export const addTransaction = async (
   user_id: number,
   category_id: number,
@@ -213,6 +224,20 @@ export const getGoals = async (
   return rows;
 };
 
+export const updateGoalAmount = async (
+  goal_id: number,
+  amount: number
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `UPDATE goals
+     SET current_amount = current_amount + ?
+     WHERE goal_id = ?`,
+    [amount, goal_id]
+  );
+
+  return result;
+};
+
 export const addGoal = async (
   user_id: number,
   name: string,
@@ -241,6 +266,18 @@ export const deleteGoal = async (
   return result;
 };
 
+export const getGoalCount = async (
+  user_id: number
+): Promise<number> => {
+  const [rows] = await pool.query<any[]>(
+    `SELECT COUNT(*) AS total
+     FROM goals
+     WHERE user_id = ?`,
+    [user_id]
+  );
+
+  return rows[0].total;
+};
 
 export const checkPassword = async (
   user_id: number,

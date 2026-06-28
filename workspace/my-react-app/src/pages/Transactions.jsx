@@ -18,7 +18,7 @@ export default function Transactions({ user }) {
 
         const data = await res.json();
 
-        console.log(data)
+        //console.log(data)
 
         setTransactions(data);
       } catch (err) {

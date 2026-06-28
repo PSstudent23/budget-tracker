@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { getGoals, addGoal, deleteGoal } from "../db/database.js";
+import { getGoals, addGoal, deleteGoal, getGoalCount} from "../db/database.js";
 
 const router = Router();
 
@@ -94,8 +94,34 @@ const deleteAGoal = async (
   }
 };
 
+const getGoalSum = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const result = await getGoalCount(req.session.user.user_id);
+
+    return res.status(200).json({
+      success: true,
+      total: result,
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 router.get("/show", showGoals)
 router.post("/add", createGoals);
 router.delete("/delete", deleteAGoal)
+router.get("/numGoals", getGoalSum)
 
 export default router

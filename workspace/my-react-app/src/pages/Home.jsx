@@ -4,10 +4,11 @@ import "../styles/Home.css";
 const API_URL = "http://localhost:30040";
 
 export default function Home({ user }) {
-  const [sum, setSum] = useState(0)
+  const [sum, setSum] = useState(0);
+  const [goalsNum, setGoalsNum] = useState(0);
 
   useEffect(() => {
-      async function getTransactionSum() {
+      async function getUserData() {
         try {
           const res = await fetch(`${API_URL}/transactions/total`, {
             credentials: "include",
@@ -16,12 +17,22 @@ export default function Home({ user }) {
           const data = await res.json();
   
           setSum(data.total);
+
+
+          const res2 = await fetch(`${API_URL}/goals/numGoals`, {
+            credentials: "include",
+          });
+
+          const data2 = await res2.json();
+          setGoalsNum(data2.total);
+
+
         } catch (err) {
           console.log("Error loading budgets:", err);
         }
       }
   
-      getTransactionSum();
+      getUserData();
     }, []);
 
   return (
@@ -46,7 +57,7 @@ export default function Home({ user }) {
 
         <div className="card">
           <p>Active goals</p>
-          <h3>3</h3>
+          <h3>{goalsNum}</h3>
         </div>
       </div>
     </div>

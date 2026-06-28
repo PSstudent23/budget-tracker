@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link, useLocation } from "react-router";
 
 
 export default function AddTransaction() {
   const navigate = useNavigate();
-
+  const location = useLocation();
 
   const [category_id, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
-  const [goal_id, setGoal] = useState("");
+  const [goal_id, setGoalId] = useState(location.state.goal_id);
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (event) => {

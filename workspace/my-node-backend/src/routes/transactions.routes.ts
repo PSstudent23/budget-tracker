@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Request, Response, NextFunction, Router } from "express";
-import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction } from "../db/database.js";
+import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction } from "../db/database.js";
 
 const router = Router();
 
@@ -19,7 +19,7 @@ const showTransactions = async (
 
     const transactions = await getTransactions(req.session.user.user_id);
 
-    console.log(transactions)
+    //console.log(transactions)
 
     res.json(transactions);
   } catch (error) {
@@ -58,6 +58,10 @@ const createTransaction = async (
       description,
       goal_id ?? undefined
     );
+
+    if (goal_id) {
+      await updateGoalAmount(goal_id, amount);
+    }
 
     return res.status(201).json({
       success: true,
@@ -140,6 +144,15 @@ const deleteATransaction = async (
     }
 
     const { transaction_id } = req.body;
+
+    const rows = await getTransaction(Number(transaction_id));
+    const transaction = rows[0];
+
+    if (transaction.goal_id) {
+      await updateGoalAmount(transaction.goal_id, -transaction.amount);
+    }
+
+
     const result = await deleteTransaction(Number(transaction_id));
 
     return res.status(201).json({

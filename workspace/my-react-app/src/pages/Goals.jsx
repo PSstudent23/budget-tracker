@@ -54,20 +54,31 @@ export default function Goals({ user }) {
     }
   };
 
+
+      const AddToGoal = async (goal_id) => {
+        navigate("/transactions/add", {
+          state: {
+            goal_id: goal_id,
+          }
+        })
+      }  
+
   return (
     <div>
       <h2>Goals</h2>
       <button className="addButton" onClick={() => navigate("/goals/add")}>add Goal</button>
      {goals.map((item) => (
       <div key={item.goal_id}>
+        <p>ID: {item.goal_id}</p>
         <p>Name: {item.name}</p>
         <p>Target: {item.target_amount}</p>
         <p>current: {item.current_amount}</p>
-        <p>ID: {item.target_date}</p>
+        <p>targetDate: {item.target_date}</p>
         <p>priority: {item.priority}</p>
         <p>created_at: {item.created_at}</p>
         <p>completed_at : {item.completed_at }</p>
-
+        
+        <button onClick={() => AddToGoal(item.goal_id)}>Add money to goal</button>
         <button onClick={() => deleteGoal(item.goal_id)}>X</button>
         <hr />
       </div>
