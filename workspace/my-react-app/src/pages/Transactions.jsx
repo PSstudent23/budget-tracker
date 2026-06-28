@@ -88,7 +88,6 @@ export default function Transactions({ user }) {
   }
 
   const deleteFile = async (attachment_id) => {
-    console.log("test" + attachment_id)
     try {
       const res = await fetch("http://localhost:30040/transactions/deleteFile", {
         method: "DELETE",

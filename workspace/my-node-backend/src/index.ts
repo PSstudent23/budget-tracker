@@ -8,6 +8,7 @@ import usersRouter from "./routes/users.routes.js";
 import transactionsRouter from "./routes/transactions.routes.js";
 import budgetsRouter from "./routes/budgets.routes.js";
 import goalsRouter from "./routes/goals.routes.js";
+import notificationsRouter from "./routes/notifications.routes.js";
 
 
 dotenv.config();
@@ -66,6 +67,7 @@ app.use("/budgets", budgetsRouter)
 
 app.use("/goals", goalsRouter)
 
+app.use("/notifications", notificationsRouter)
 //Login and Register
 app.use("/users", usersRouter);
 

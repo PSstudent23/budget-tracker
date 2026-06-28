@@ -1,11 +1,11 @@
 
-import mysql, { ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import mysql, { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || "db",
-  user: process.env.DB_USER || "studenti",
-  password: process.env.DB_PASSWORD || "S039C8R7",
-  database: process.env.DB_NAME || "SISIII2026_89241250",
+  host: process.env.DB_HOST || 'db',
+  user: process.env.DB_USER || 'studenti',
+  password: process.env.DB_PASSWORD || 'S039C8R7',
+  database: process.env.DB_NAME || 'SISIII2026_89241250',
   waitForConnections: true,
   connectionLimit: 10,
 });
@@ -27,7 +27,7 @@ export interface Transaction extends RowDataPacket {
   user_id: number;
   category_id: number;
   category_name: string;
-  category_type: "income" | "expense";
+  category_type: 'income' | 'expense';
   amount: number;
   date: Date;
   description: string;
@@ -65,10 +65,21 @@ export interface Goal extends RowDataPacket {
   target_amount: number;
   current_amount: number;
   target_date: string;
-  status: "not_started" | "in_progress" | "behind" | "completed";
+  status: 'not_started' | 'in_progress' | 'behind' | 'completed';
   priority: number;
   created_at: string;
   completed_at: string;
+}
+
+export interface Notification extends RowDataPacket {
+  notification_id: number
+  user_id: number;
+  category_id : number;
+  type: 'budget_exceeded' | 'goal_progress' | 'goal_completed' | 'unusual_spending';
+  title: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
 }
 
 //Login
@@ -115,7 +126,7 @@ export const getTransactions = async (
     [user_id]
   );
 
-  console.log(rows)
+  //console.log(rows)
 
   return rows;
 };
@@ -153,7 +164,7 @@ export const deleteTransaction = async (
 ): Promise<ResultSetHeader> => {
 
   await pool.query(
-    "DELETE FROM attachment WHERE transaction_id = ?",
+    'DELETE FROM attachment WHERE transaction_id = ?',
     [transaction_id]
   );
 
@@ -217,7 +228,6 @@ export const deleteBudget = async (
 
 export const getGoals = async (
   user_id: number,
-  
 ): Promise<Goal[]> => {
   const [rows] = await pool.query<Goal[]>(
     `SELECT * FROM goals WHERE user_id = ?`,
@@ -246,7 +256,7 @@ export const addGoal = async (
   name: string,
   target_amount: number,
   target_date: string,
-  status: "not_started" | "in_progress" | "behind" | "completed",
+  status: 'not_started' | 'in_progress' | 'behind' | 'completed',
   priority: number,
 ): Promise<ResultSetHeader> => {
    const [result] = await pool.query<ResultSetHeader>(
@@ -359,4 +369,16 @@ export const deleteFile = async (
   );
 
   return result;
+};
+
+
+export const getNotifications = async (
+  user_id: number,
+): Promise<Notification[]> => {
+  const [rows] = await pool.query<Notification[]>(
+    `SELECT * FROM notifications`,
+    [user_id]
+  );
+
+  return rows;
 };

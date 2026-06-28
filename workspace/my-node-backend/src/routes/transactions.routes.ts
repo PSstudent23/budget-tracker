@@ -59,7 +59,7 @@ const createTransaction = async (
       goal_id ?? undefined
     );
 
-    console.log(result)
+    //console.log(result)
 
     if (goal_id) {
       await updateGoalAmount(goal_id, amount);
@@ -74,7 +74,7 @@ const createTransaction = async (
     } catch (error) {
         next(error);
     }
-}
+};
 
 const getTotal = async (
   req: Request, 
@@ -182,7 +182,6 @@ const deleteATransaction = async (
       await updateGoalAmount(transaction.goal_id, -transaction.amount);
     }
 
-
     const result = await deleteTransaction(Number(transaction_id));
 
     return res.status(201).json({
@@ -195,11 +194,10 @@ const deleteATransaction = async (
   }
 };
 
-
-router.get("/show", showTransactions)
+router.get("/show", showTransactions);
 router.post("/add", createTransaction);
-router.get("/total", getTotal)
-router.delete("/delete", deleteATransaction)
+router.get("/total", getTotal);
+router.delete("/delete", deleteATransaction);
 router.post("/upload", upload.single("file"), addAttachment);
 router.delete("/deleteFile", deleteAttachment);
 
