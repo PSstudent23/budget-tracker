@@ -18,6 +18,8 @@ const showBudgets = async (
 
     const budgets = await getBudgets(req.session.user.user_id);
 
+    console.log(budgets)
+
     res.json(budgets);
   } catch (error) {
     next(error);

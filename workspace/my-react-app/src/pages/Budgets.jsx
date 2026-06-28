@@ -60,11 +60,13 @@ export default function Budgets({ user }) {
       <button className="addButton" onClick={() => navigate("/budgets/add")}>add Budget</button>
      {budgets.map((item) => (
       <div key={item.budget_id}>
-        <p>budgetId" {item.budget_id}</p>
+        <p>budgetId: {item.budget_id}</p>
         <p>Start: {item.start_date}</p>
         <p>End: {item.end_date}</p>
         <p>Limit: {item.budget_limit}</p>
         <p>IsActive: {item.is_active}</p>
+        <p>Category: {item.category_id}</p>
+        <p>Current spent: {item.total_amount}</p>
         <button onClick={() => deleteBudget(item.budget_id)}>X</button>
         <hr />
       </div>

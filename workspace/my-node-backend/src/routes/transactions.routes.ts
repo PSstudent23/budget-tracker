@@ -19,6 +19,8 @@ const showTransactions = async (
 
     const transactions = await getTransactions(req.session.user.user_id);
 
+    console.log(transactions)
+
     res.json(transactions);
   } catch (error) {
     next(error);

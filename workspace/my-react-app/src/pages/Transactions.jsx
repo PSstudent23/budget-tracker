@@ -18,6 +18,8 @@ export default function Transactions({ user }) {
 
         const data = await res.json();
 
+        console.log(data)
+
         setTransactions(data);
       } catch (err) {
         console.log("Error loading transactions:", err);
@@ -40,6 +42,7 @@ export default function Transactions({ user }) {
       
 
       const data = await res.json();
+
 
       if (res.ok) {
         setMessage("Transaction Deleted");
@@ -92,8 +95,9 @@ export default function Transactions({ user }) {
         <p>Description: {item.description}</p>
         <p>Date: {item.date}</p>
         <p>Created: {item.created_at}</p>
-        <p>Goal: {item.goal_id}</p>
+        <p>Goal: {item.goal_name}</p>
         <p>Category: {item.category_name}</p>
+        <p>Category type: {item.category_type}</p>
         <p>FileName: {item.filename}</p>
         <input
           type="file"

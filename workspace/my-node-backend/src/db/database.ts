@@ -27,11 +27,13 @@ export interface Transaction extends RowDataPacket {
   user_id: number;
   category_id: number;
   category_name: string;
+  category_type: "income" | "expense";
   amount: number;
   date: Date;
   description: string;
   created_at: Date;
   goal_id: number;
+  goal_name: string,
 
   attachment: Attachment | null;
 }
@@ -53,6 +55,7 @@ export interface Budget extends RowDataPacket {
   budget_limit: string;
   is_active: boolean;
   created_at: string;
+  current_amount: number;
 }
 
 export interface Goal extends RowDataPacket {
@@ -102,9 +105,10 @@ export const getTransactions = async (
   
 ): Promise<Transaction[]> => {
   const [rows] = await pool.query<Transaction[]>(
-    `SELECT t.*, c.name AS category_name, a.attachment_id, a.filename
+    `SELECT t.*, c.name AS category_name, c.type AS category_type, g.goal_id, g.name AS goal_name, a.attachment_id, a.filename
     FROM transactions t
     JOIN categories c ON t.category_id = c.category_id
+    LEFT JOIN goals g ON t.goal_id = g.goal_id
     LEFT JOIN attachment a ON a.transaction_id = t.transaction_id
     WHERE t.user_id = ?`,
     [user_id]
@@ -154,7 +158,15 @@ export const getBudgets = async (
   
 ): Promise<Budget[]> => {
   const [rows] = await pool.query<Budget[]>(
-    `SELECT * FROM budgets WHERE user_id = ?`,
+    `SELECT b.*, total_amount
+    from budgets b
+    LEFT JOIN (
+      SELECT category_id, SUM(amount) AS total_amount
+      FROM transactions
+        WHERE user_id = 5
+        GROUP BY category_id
+    ) c ON b.category_id = c.category_id
+    WHERE b.user_id = ?;`,
     [user_id]
   );
 

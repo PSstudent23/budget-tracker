@@ -62,6 +62,12 @@ export default function Goals({ user }) {
       <div key={item.goal_id}>
         <p>Name: {item.name}</p>
         <p>Target: {item.target_amount}</p>
+        <p>current: {item.current_amount}</p>
+        <p>ID: {item.target_date}</p>
+        <p>priority: {item.priority}</p>
+        <p>created_at: {item.created_at}</p>
+        <p>completed_at : {item.completed_at }</p>
+
         <button onClick={() => deleteGoal(item.goal_id)}>X</button>
         <hr />
       </div>
