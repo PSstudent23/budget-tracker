@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { getNotifications } from "../db/database.js";
+import { addNotification, getNotifications, readAll } from "../db/database.js";
 
 const router = Router();
 
@@ -24,8 +24,7 @@ const showNotifications = async (
   }
 };
 
-/*
-const createBudget = async (
+const readAllNotifications = async (
     req: Request, 
     res: Response, 
     next: NextFunction
@@ -38,35 +37,44 @@ const createBudget = async (
       });
     }
 
-    const {category_id,start_date,end_date,budget_limit,is_active} = req.body;
+    const read = await readAll(req.session.user.user_id);
 
-     if (!category_id || !start_date || !end_date || !budget_limit) {
-      return res.status(400).json({
+    res.json(read);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+const createNotification = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
         success: false,
-        message: "Missing required fields",
+        message: "Not logged in",
       });
     }
 
-    const result = await addBudget(
-      req.session.user.user_id,
-      category_id,
-      start_date,
-      end_date,
-      budget_limit,
-      is_active
-    );
+    const { category_id, type, title, message } = req.body;
+
+    const result = await addNotification( req.session.user.user_id, category_id, type, title, message );
 
     return res.status(201).json({
       success: true,
-      message: "Budget created"
+      message: "Notification created",
     });
 
+  } catch (error) {
+    next(error);
+  }
+};
 
-    } catch (error) {
-        next(error);
-    }
-}
-
+/*
 const deleteABudget = async (
     req: Request, 
     res: Response, 
@@ -95,7 +103,8 @@ const deleteABudget = async (
 
 */
 router.get("/show", showNotifications)
-//router.post("/add", createBudget);
+router.post("/readAll", readAllNotifications)
+router.post("/create", createNotification);
 //router.delete("/delete", deleteABudget)
 
 export default router

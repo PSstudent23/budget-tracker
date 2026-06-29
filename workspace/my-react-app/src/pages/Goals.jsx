@@ -64,6 +64,37 @@ export default function Goals({ user }) {
     })
   }  
 
+  
+  const updateStatus = async (goal_id, name, status) => {
+    try {
+      const res = await fetch("http://localhost:30040/goals/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ 
+          goal_id,
+          name,
+          status
+        })
+      });
+      
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Status updated");
+        window.location.reload(); 
+      } else {
+        setMessage(data.message || "Failed.");
+      }
+    } catch (err) {
+      console.error("Goal error:", err);
+    }
+  }
+
+
+
 
   return (
     <div>
@@ -84,11 +115,21 @@ export default function Goals({ user }) {
             <p>Target: {item.target_amount}</p>
             <p>Current: {item.current_amount}</p>
             <p>Target Date: {item.target_date}</p>
+            <select
+              value={item.status}
+              onChange={(e) => updateStatus(item.goal_id, item.name, e.target.value)}
+            >
+              <option value="not_started">Not Started</option>
+              <option value="in_progress">In Progress</option>
+              <option value="behind">Behind</option>
+              <option value="completed">Completed</option>
+            </select>
+
 
             <p>Months left: {dif}</p>
             <p>Per month to reach: {perMonth}</p>
 
-            <button onClick={() => AddToGoal(item.goal_id)}>
+            <button onClick={() => AddToGoal(item.goal_id)} disabled={item.status === 'completed'}>
               Add money to goal
             </button>
 

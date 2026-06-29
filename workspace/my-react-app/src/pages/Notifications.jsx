@@ -19,6 +19,7 @@ export default function Notifications({ user }) {
         const data = await res.json();
 
         setNotifications(data);
+
       } catch (err) {
         console.log("Error loading notifications:", err);
       }
@@ -27,9 +28,36 @@ export default function Notifications({ user }) {
     loadNotifications();
   }, []);
 
+
+  const readAll = async () => {
+     try {
+      const res = await fetch("http://localhost:30040/notifications/readAll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      
+
+      const data = await res.json();
+
+
+      if (res.ok) {
+        setMessage("Notifications Read");
+        window.location.reload(); 
+      } else {
+        setMessage(data.message || "Failed.");
+      }
+    } catch (err) {
+      console.error("Notification error:", err);
+    }
+  }
+
   return (
     <div>
       <h2>Notifications</h2>
+      <button onClick={readAll}>READ ALL</button>
      {notifications.map((item) => (
       <div key={item.notification_id }>
         <p>Notification ID: {item.notification_id }</p>

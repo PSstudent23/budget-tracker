@@ -188,11 +188,11 @@ export const getBudgets = async (
     LEFT JOIN (
       SELECT category_id, SUM(amount) AS total_amount
       FROM transactions
-        WHERE user_id = 5
+        WHERE user_id = ?
         GROUP BY category_id
     ) c ON b.category_id = c.category_id
     WHERE b.user_id = ?;`,
-    [user_id]
+    [user_id, user_id]
   );
 
   return rows;
@@ -238,14 +238,15 @@ export const getGoals = async (
 };
 
 export const updateGoalAmount = async (
+  user_id: number,
   goal_id: number,
   amount: number
 ): Promise<ResultSetHeader> => {
   const [result] = await pool.query<ResultSetHeader>(
     `UPDATE goals
      SET current_amount = current_amount + ?
-     WHERE goal_id = ?`,
-    [amount, goal_id]
+     WHERE goal_id = ? AND user_id = ?`,
+    [amount, goal_id, user_id]
   );
 
   return result;
@@ -290,6 +291,21 @@ export const getGoalCount = async (
   );
 
   return rows[0].total;
+};
+
+export const updateGoal = async (
+  user_id: number,
+  goal_id: number,
+  status: 'not_started' | 'in_progress' | 'behind' | 'completed'
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `UPDATE goals 
+    SET status = ?
+    WHERE goal_id = ? AND user_id = ?;`,
+    [status, goal_id, user_id]
+  );
+
+  return result;
 };
 
 export const checkPassword = async (
@@ -371,14 +387,45 @@ export const deleteFile = async (
   return result;
 };
 
+export const addNotification = async (
+  user_id: number,
+  category_id: number | null,
+  type: string,
+  title: string,
+  message: string
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `INSERT INTO notifications
+     (user_id, category_id, type, title, message, is_read, created_at)
+     VALUES (?, ?, ?, ?, ?, 0, NOW())`,
+    [user_id, category_id, type, title, message]
+  );
+
+  return result;
+};
 
 export const getNotifications = async (
   user_id: number,
 ): Promise<Notification[]> => {
   const [rows] = await pool.query<Notification[]>(
-    `SELECT * FROM notifications`,
+    `SELECT * FROM notifications
+    WHERE user_id = ?
+    ORDER BY notification_id desc`,
     [user_id]
   );
 
   return rows;
+};
+
+export const readAll = async (
+  user_id: number,
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `UPDATE notifications
+     SET is_read = 1
+     WHERE user_id = ?`,
+    [user_id]
+  );
+
+  return result;
 };

@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Request, Response, NextFunction, Router } from "express";
-import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction, deleteFile } from "../db/database.js";
+import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction, deleteFile, addNotification, getBudgets } from "../db/database.js";
 
 const router = Router();
 
@@ -62,8 +62,41 @@ const createTransaction = async (
     //console.log(result)
 
     if (goal_id) {
-      await updateGoalAmount(goal_id, amount);
+      await updateGoalAmount(goal_id, amount, req.session.user.user_id);
+
+      await addNotification(
+      req.session.user.user_id,
+      category_id,
+      "goal_progress",
+      "Goal updated",
+      `You added ${amount}€ to your goal`
+      );
     }
+
+    const budgets = await getBudgets(req.session.user.user_id);
+
+    console.log(budgets)
+
+    for (const b of budgets) {
+      //if (b.category_id !== category_id) continue;
+        const spent = Number(b.total_amount)
+        const limit = Number(b.budget_limit)
+
+
+        console.log(`spent: ${spent}, limit: ${limit}`)
+
+        if (spent > limit) {
+            await addNotification(
+            req.session.user.user_id,
+            category_id,
+            "budget_exceeded",
+            "Budget exceeded",
+            `Budget exceded by ${spent - limit}€`
+          );
+        }
+    }
+    
+
 
     return res.status(201).json({
       success: true,
@@ -179,7 +212,7 @@ const deleteATransaction = async (
     const transaction = rows[0];
 
     if (transaction.goal_id) {
-      await updateGoalAmount(transaction.goal_id, -transaction.amount);
+      await updateGoalAmount(transaction.goal_id, -transaction.amount, req.session.user.user_id);
     }
 
     const result = await deleteTransaction(Number(transaction_id));

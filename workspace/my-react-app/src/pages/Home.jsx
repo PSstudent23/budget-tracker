@@ -37,12 +37,12 @@ export default function Home({ user }) {
 
   return (
     <div>
-      <h2>User: {user?.first_name}</h2>
+      <h2>User: {user.first_name} {user.last_name}</h2>
 
       <div className="cards">
         <div className="card">
           <p>Monthly income</p>
-          <h3>{user?.monthly_income}</h3>
+          <h3>{user.monthly_income}</h3>
         </div>
 
         <div className="card">
