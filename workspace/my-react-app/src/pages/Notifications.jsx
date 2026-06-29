@@ -66,7 +66,7 @@ export default function Notifications({ user }) {
         <div className={`notification-card ${item.is_read ? "read" : ""}`} key={item.notification_id}>
           <p style={{ fontWeight: "bold" }}>{item.title}</p>
           <p>{item.message}</p>
-          <p>Category: {item.category_id}</p>
+          <p>Category: {item.name}</p>
           <p>SENT: {new Date(item.created_at).toLocaleDateString("en-GB", {
                   minute: "numeric",
                   hour: "numeric",

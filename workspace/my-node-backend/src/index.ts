@@ -9,6 +9,8 @@ import transactionsRouter from "./routes/transactions.routes.js";
 import budgetsRouter from "./routes/budgets.routes.js";
 import goalsRouter from "./routes/goals.routes.js";
 import notificationsRouter from "./routes/notifications.routes.js";
+import { getCategories } from "./db/database.js";
+
 
 
 dotenv.config();
@@ -20,7 +22,6 @@ app.use(cors({
   origin: "http://localhost:30041",
   credentials: true,
 }));
-
 
 app.use(
   session({
@@ -68,6 +69,29 @@ app.use("/api/budgets", budgetsRouter)
 app.use("/api/goals", goalsRouter)
 
 app.use("/api/notifications", notificationsRouter)
+
+app.get("/api/categories", async (req: Request, res: Response) => {
+  if (!req.session.user) {
+    return res.status(401).json({
+      ok: false,
+      message: "Not authenticated",
+    });
+  }
+
+  try {
+    const categories = await getCategories();
+
+    res.json(categories);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      ok: false,
+      message: "Internal server error",
+    });
+  }
+});
+
 //Login and Register
 app.use("/api/users", usersRouter);
 

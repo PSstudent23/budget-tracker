@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import "../styles/AddBudgets.css"
 
@@ -12,6 +12,22 @@ export default function AddBudgets() {
   const [budget_limit, setBudgetLimit] = useState("");
   const [is_active, setActive] = useState("");
   const [message, setMessage] = useState("");
+  const [categories, setCategories] = useState([]);
+
+    useEffect (() => {
+        async function getCategories() {
+          const res2 = await fetch("http://localhost:30040/api/categories", {
+          credentials: "include"
+          });
+  
+          const data2 = await res2.json();
+          setCategories(data2);
+  
+          
+        }
+        getCategories();
+   
+      }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,6 +51,7 @@ export default function AddBudgets() {
 
       const data = await res.json();
 
+
       if (res.ok) {
         navigate("/budgets");
       } else {
@@ -53,13 +70,19 @@ export default function AddBudgets() {
     {message && <p className="message">{message}</p>}
 
     <div className="add-budgets-card">
-      <p>Select Category</p>
-      <input
-        type="number"
-        placeholder="Category ID"
+      <p>Category</p>
+      <select
         value={category_id}
         onChange={(e) => setCategory(e.target.value)}
-      />
+      >
+        <option value="">Select category</option>
+
+        {categories.map(({ category_id, name, type }) => (
+          <option key={category_id} value={category_id}>
+            {name} ({type})
+          </option>
+        ))}
+      </select>
 
       <p>Start date for budget</p>
       <input
@@ -83,13 +106,14 @@ export default function AddBudgets() {
         onChange={(e) => setBudgetLimit(e.target.value)}
       />
 
-      <p>Is active (0 / 1)</p>
-      <input
-        type="number"
-        placeholder="Is active (0 / 1)"
-        value={is_active}
-        onChange={(e) => setActive(e.target.value)}
-      />
+      <div className="checkbox">
+        <p>Active?</p>
+        <input
+          type="checkbox"
+          checked={is_active}
+          onChange={(e) => setActive(e.target.checked)}
+        />
+      </div>
 
       <div className="submit-button">
         <button onClick={handleSubmit}>Add Budget</button>

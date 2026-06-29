@@ -34,6 +34,8 @@ export default function AppLayout({ user, children }) {
           {user.first_name} {user.last_name}
         </p>
 
+        <br/>
+
         <button className={isActive("/")} onClick={() => navigate("/")}>
           Home
         </button>

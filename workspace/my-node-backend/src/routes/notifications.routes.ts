@@ -18,6 +18,8 @@ const showNotifications = async (
 
     const notifications = await getNotifications(req.session.user.user_id);
 
+    console.log(notifications)
+
     res.json(notifications);
   } catch (error) {
     next(error);

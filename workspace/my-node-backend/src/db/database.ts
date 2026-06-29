@@ -80,7 +80,15 @@ export interface Notification extends RowDataPacket {
   message: string;
   is_read: boolean;
   created_at: string;
+  category_name: string;
 }
+
+export interface Category extends RowDataPacket {
+  category_id: number;
+  name: string;
+  type: 'income' | 'expense';
+}
+
 
 export interface SpendingByCategory extends RowDataPacket {
   category: string;
@@ -444,9 +452,11 @@ export const getNotifications = async (
   user_id: number,
 ): Promise<Notification[]> => {
   const [rows] = await pool.query<Notification[]>(
-    `SELECT * FROM notifications
+    `SELECT DISTINCT n.*, c.name 
+    FROM notifications n
+    JOIN categories c ON n.category_id = c.category_id
     WHERE user_id = ?
-    ORDER BY notification_id desc`,
+    ORDER BY notification_id desc;`,
     [user_id]
   );
 
@@ -482,3 +492,17 @@ export const spendingByCategory = async (
 
   return result;
 };
+
+export const getCategories = async (
+
+): Promise<Category[]> => {
+  const [result] = await pool.query<Category[]>(
+    `SELECT *
+    FROM categories`
+  );
+
+  return result;
+};
+
+
+

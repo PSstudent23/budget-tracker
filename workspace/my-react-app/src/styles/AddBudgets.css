@@ -28,6 +28,13 @@
   box-sizing: border-box;
 }
 
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
 .submit-button {
   margin-top: 10px;
   display: flex;
