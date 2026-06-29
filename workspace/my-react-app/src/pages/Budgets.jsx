@@ -14,7 +14,7 @@ export default function Budgets({ user }) {
   useEffect(() => {
     async function loadBudgets() {
       try {
-        const res = await fetch(`${API_URL}/budgets/show`, {
+        const res = await fetch(`${API_URL}/api/budgets/show`, {
           credentials: "include",
         }); 
 
@@ -32,7 +32,7 @@ export default function Budgets({ user }) {
 
   const deleteBudget = async (budget_id) => {
     try {
-      const res = await fetch(`${API_URL}/budgets/delete`, {
+      const res = await fetch(`${API_URL}/api/budgets/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

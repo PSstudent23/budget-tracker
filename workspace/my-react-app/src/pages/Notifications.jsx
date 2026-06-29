@@ -14,7 +14,7 @@ export default function Notifications({ user }) {
   useEffect(() => {
     async function loadNotifications() {
       try {
-        const res = await fetch(`${API_URL}/notifications/show`, {
+        const res = await fetch(`${API_URL}/api/notifications/show`, {
           credentials: "include",
         }); 
 
@@ -33,7 +33,7 @@ export default function Notifications({ user }) {
 
   const readAll = async () => {
      try {
-      const res = await fetch("http://localhost:30040/notifications/readAll", {
+      const res = await fetch("http://localhost:30040/api/notifications/readAll", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

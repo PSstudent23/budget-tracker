@@ -20,7 +20,7 @@ export default function Settings({ user }) {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:30040/users/update", {
+      const res = await fetch("http://localhost:30040/api/users/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default function Settings({ user }) {
   };
 
   async function handleLogout() {
-    const res = await fetch("http://localhost:30040/logout", {
+    const res = await fetch("http://localhost:30040/api/logout", {
       method: "POST",
       credentials: "include",
     })

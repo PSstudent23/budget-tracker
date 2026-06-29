@@ -18,7 +18,7 @@ export default function AddBudgets() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:30040/budgets/add", {
+      const res = await fetch("http://localhost:30040/api/budgets/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

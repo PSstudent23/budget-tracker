@@ -16,7 +16,7 @@ export default function Register({ setUser }) {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:30040/users/register", {
+      const res = await fetch("http://localhost:30040/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -14,7 +14,7 @@ export default function Goals({ user }) {
   useEffect(() => {
     async function loadGoals() {
       try {
-        const res = await fetch(`${API_URL}/goals/show`, {
+        const res = await fetch(`${API_URL}/api/goals/show`, {
           credentials: "include",
         }); 
 
@@ -32,7 +32,7 @@ export default function Goals({ user }) {
 
   const deleteGoal = async (goal_id) => {
     try {
-      const res = await fetch("http://localhost:30040/goals/delete", {
+      const res = await fetch("http://localhost:30040/api/goals/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export default function Goals({ user }) {
   
   const updateStatus = async (goal_id, name, status) => {
     try {
-      const res = await fetch("http://localhost:30040/goals/update", {
+      const res = await fetch("http://localhost:30040/api/goals/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

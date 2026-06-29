@@ -12,7 +12,7 @@ export default function Home({ user }) {
   useEffect(() => {
       async function getUserData() {
         try {
-          const res = await fetch(`${API_URL}/transactions/total`, {
+          const res = await fetch(`${API_URL}/api/transactions/total`, {
             credentials: "include",
           }); 
   
@@ -21,21 +21,21 @@ export default function Home({ user }) {
           setSum(data.total);
 
 
-          const res2 = await fetch(`${API_URL}/goals/numGoals`, {
+          const res2 = await fetch(`${API_URL}/api/goals/numGoals`, {
             credentials: "include",
           });
 
           const data2 = await res2.json();
           setGoalsNum(data2.total);
 
-          const res3 = await fetch(`${API_URL}/transactions/recent`, {
+          const res3 = await fetch(`${API_URL}/api/transactions/recent`, {
             credentials: "include",
           });
 
           const data3 = await res3.json();
           setRecentTransactions(data3);
 
-          const res4 = await fetch(`${API_URL}/transactions/spent`, {
+          const res4 = await fetch(`${API_URL}/api/transactions/spent`, {
             credentials: "include",
           });
 

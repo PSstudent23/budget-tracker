@@ -20,7 +20,7 @@ export default function AddTransaction() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:30040/transactions/add", {
+      const res = await fetch("http://localhost:30040/api/transactions/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -15,7 +15,7 @@ export default function Login({ setUser }) {
     setMessage("");
 
     try {
-      const res = await fetch(`${API_URL}/users/login`, {
+      const res = await fetch(`${API_URL}/api/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
