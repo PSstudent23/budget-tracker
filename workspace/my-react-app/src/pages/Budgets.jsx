@@ -69,14 +69,17 @@ return (
 
     {budgets.map((item) => (
       <div className="budget-card" key={item.budget_id}>
-        <p>Budget ID: {item.budget_id}</p>
-        <p>Start: {item.start_date}</p>
-        <p>End: {item.end_date}</p>
-        <p>Limit: {item.budget_limit}</p>
-        <p>Is Active: {item.is_active}</p>
-        <p>Category: {item.category_id}</p>
-        <p>Category Name: {item.category_name}</p>
-        <p>Current Spent: {item.total_amount}</p>
+        <p style={{fontWeight: "bold"}}>{item.category_name}</p>
+        <p style={{fontWeight: "bold",  fontSize: "20px", color:  Number(item.total_amount) > Number(item.budget_limit) ? "#e74c3c" : ""}}>{item.total_amount}€/{item.budget_limit}€</p>
+        <p> {new Date(item.start_date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          })} - {new Date(item.end_date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          })} </p>
+        <p>{((item.total_amount / item.budget_limit) * 100).toFixed(2)}% Used</p>
+        <p>{item.is_active ? "Active" : "Inactive"}</p>
 
         <div className="budget-card2">
           <button onClick={() => deleteBudget(item.budget_id)}>X</button>

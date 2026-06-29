@@ -64,13 +64,17 @@ export default function Notifications({ user }) {
 
       {notifications.map((item) => (
         <div className={`notification-card ${item.is_read ? "read" : ""}`} key={item.notification_id}>
-          <p>Notification ID: {item.notification_id}</p>
-          <p>Type: {item.type}</p>
-          <p>Title: {item.title}</p>
-          <p>Message: {item.message}</p>
-          <p>Is Read: {item.is_read}</p>
+          <p style={{ fontWeight: "bold" }}>{item.title}</p>
+          <p>{item.message}</p>
           <p>Category: {item.category_id}</p>
-          <p>Created At: {item.created_at}</p>
+          <p>SENT: {new Date(item.created_at).toLocaleDateString("en-GB", {
+                  minute: "numeric",
+                  hour: "numeric",
+                  day: "numeric",
+                  month: "numeric",
+                  year: "numeric"
+                })}</p>
+          <p style={{ fontWeight: "lighter" }}>{item.is_read ? "You have read this notification" : "New notification"}</p>
         </div>
       ))}
     </div>

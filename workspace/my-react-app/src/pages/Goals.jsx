@@ -116,12 +116,22 @@ export default function Goals({ user }) {
 
         return (
           <div className="goal-card" key={item.goal_id}>
-            <p>ID: {item.goal_id}</p>
-            <p>Name: {item.name}</p>
-            <p>Target: {item.target_amount}</p>
-            <p>Current: {item.current_amount}</p>
-            <p>Target Date: {item.target_date}</p>
+            <p style={{fontWeight: "bold" }}>{item.name}</p>
+            <p>Saved: {item.current_amount}€ / {item.target_amount}€</p>
+            <p> {(item.current_amount / item.target_amount).toFixed(2) * 100}% complete</p>
+            <p>
+              Deadline:{" "}
+              {new Date(item.created_at).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </p>
 
+            <p>
+              Required pace: €{perMonth}/month over {dif} months remaining
+            </p>
+            
             <select
               value={item.status}
               onChange={(e) =>
@@ -133,9 +143,6 @@ export default function Goals({ user }) {
               <option value="behind">Behind</option>
               <option value="completed">Completed</option>
             </select>
-
-            <p>Months left: {dif}</p>
-            <p>Per month to reach: {perMonth}</p>
 
             <div className="submit-buttons">
               <button onClick={() => AddToGoal(item.goal_id)} disabled={item.status === "completed"}>Add money to goal</button>

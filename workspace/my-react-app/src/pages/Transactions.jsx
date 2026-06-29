@@ -154,16 +154,21 @@ export default function Transactions({ user }) {
 
       {transactions.map((item) => (
         <div className="transaction" key={item.transaction_id}>
-          <div className="transaction-card">
-            <p>Amount: {item.amount}</p>
+          <div className="transaction-card" >
+            <p style={{fontWeight: "bold", color: item.category_type === "income" ? "#73ff00" : "#ff1500"}}>{item.category_name}</p>
+            <p> {item.category_type === "income" ? "+" : "-"}{item.amount}€ </p>
             <p>Description: {item.description}</p>
-            <p>Date: {item.date}</p>
-            <p>Created: {item.created_at}</p>
-            <p>Goal: {item.goal_name}</p>
-            <p>Category: {item.category_name}</p>
-            <p>Category type: {item.category_type}</p>
-            <button onClick={() => downloadFile(item.attachment_id, item.filename)} disabled={!item.filename}>File Name: {item.filename}</button>
-            <p>File ID: {item.attachment_id}</p>
+            <p>Transaction made on: {new Date(item.created_at).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "numeric",
+                  year: "numeric"
+                })}, 
+              at: {new Date(item.created_at).toLocaleTimeString("en-GB", {
+                  minute: "numeric",
+                  hour: "numeric"
+                  })} </p>
+            <p>{!item.goal_name ? "" : "Added for a goal: " + item.goal_name}</p>
+            {item.attachment_id && (<button onClick={() => downloadFile(item.attachment_id, item.filename)}>File name: {item.filename}</button>)}
           </div>
 
           <div className="submit-area">
@@ -173,9 +178,8 @@ export default function Transactions({ user }) {
             />
             
 
+            {item.attachment_id && (<button onClick={() => deleteFile(item.attachment_id)}>Delete Attachment</button>)}
             <button onClick={() => deleteTransaction(item.transaction_id)}>Delete</button>
-
-            <button onClick={() => deleteFile(item.attachment_id)}>Delete Attachment</button>
           </div>
         </div>
       ))}
