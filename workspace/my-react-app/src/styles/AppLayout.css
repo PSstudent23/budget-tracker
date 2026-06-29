@@ -3,6 +3,9 @@
 }
 
 .sidebar {
+  position: fixed;
+  left: 3%;
+  top: 0;
   width: 200px;
   padding: 10px;
 }

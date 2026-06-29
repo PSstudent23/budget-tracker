@@ -1,6 +1,6 @@
 import multer from "multer";
 import { Request, Response, NextFunction, Router } from "express";
-import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction, deleteFile, addNotification, getBudgets } from "../db/database.js";
+import { getTransactions, addTransaction, getTransactionSum, addFile, deleteTransaction, updateGoalAmount, getTransaction, deleteFile, addNotification, getBudgets, recentTransactions, spendingByCategory, getFile } from "../db/database.js";
 
 const router = Router();
 
@@ -78,12 +78,16 @@ const createTransaction = async (
     console.log(budgets)
 
     for (const b of budgets) {
+      //console.log("budget category:" + b.category_id, "sent" + category_id)
+      if (Number(b.category_id) !== Number(category_id)) continue;
       //if (b.category_id !== category_id) continue;
         const spent = Number(b.total_amount)
         const limit = Number(b.budget_limit)
 
 
-        console.log(`spent: ${spent}, limit: ${limit}`)
+        //console.log("budget category:" + b.category_id, "sent" + category_id + "INSIDE THE FUCKING")
+
+        //console.log(`spent: ${spent}, limit: ${limit}`)
 
         if (spent > limit) {
             await addNotification(
@@ -193,6 +197,32 @@ const deleteAttachment = async (
   }
 }
 
+const downloadAttachment = async (
+    req: Request, 
+    res: Response,
+    next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const { attachment_id } = req.body;
+    const rows = await getFile(Number(attachment_id));
+
+    const { filename, file_type, file_data } = rows[0];
+
+    res.setHeader("Content-Type", file_type);
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.send(file_data);
+  } catch (error) {
+    next(error);
+  }
+}
+
 const deleteATransaction = async (
     req: Request, 
     res: Response, 
@@ -227,11 +257,58 @@ const deleteATransaction = async (
   }
 };
 
+const lastTransactions = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const recent = await recentTransactions(req.session.user.user_id);
+
+    res.json(recent)
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+const spentByCategory = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction
+) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not logged in",
+      });
+    }
+
+    const spent = await spendingByCategory(req.session.user.user_id);
+
+    res.json(spent)
+
+  } catch (error) {
+    next(error);
+  }
+}
+
 router.get("/show", showTransactions);
 router.post("/add", createTransaction);
 router.get("/total", getTotal);
 router.delete("/delete", deleteATransaction);
 router.post("/upload", upload.single("file"), addAttachment);
 router.delete("/deleteFile", deleteAttachment);
-
+router.get("/recent", lastTransactions)
+router.get("/spent", spentByCategory)
+router.post("/download", downloadAttachment);
 export default router

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
+import "../styles/Goals.css"
+
 
 const API_URL = "http://localhost:30040";
 
@@ -97,27 +99,34 @@ export default function Goals({ user }) {
 
 
   return (
-    <div>
+    <div className="goals">
       <h2>Goals</h2>
+
       <button className="addButton" onClick={() => navigate("/goals/add")}>add Goal</button>
-     {goals.map((item) => {
-        const today = new Date()
+
+      {goals.map((item) => {
+        const today = new Date();
         const target = new Date(item.target_date);
 
-        const dif =  (target.getFullYear() - today.getFullYear()) * 12 + (target.getMonth() - today.getMonth())
+        const dif =
+          (target.getFullYear() - today.getFullYear()) * 12 +
+          (target.getMonth() - today.getMonth());
+
         const perMonth = item.target_amount / dif;
 
-
         return (
-          <div key={item.goal_id}>
+          <div className="goal-card" key={item.goal_id}>
             <p>ID: {item.goal_id}</p>
             <p>Name: {item.name}</p>
             <p>Target: {item.target_amount}</p>
             <p>Current: {item.current_amount}</p>
             <p>Target Date: {item.target_date}</p>
+
             <select
               value={item.status}
-              onChange={(e) => updateStatus(item.goal_id, item.name, e.target.value)}
+              onChange={(e) =>
+                updateStatus(item.goal_id, item.name, e.target.value)
+              }
             >
               <option value="not_started">Not Started</option>
               <option value="in_progress">In Progress</option>
@@ -125,16 +134,13 @@ export default function Goals({ user }) {
               <option value="completed">Completed</option>
             </select>
 
-
             <p>Months left: {dif}</p>
             <p>Per month to reach: {perMonth}</p>
 
-            <button onClick={() => AddToGoal(item.goal_id)} disabled={item.status === 'completed'}>
-              Add money to goal
-            </button>
-
-            <button onClick={() => deleteGoal(item.goal_id)}>X</button>
-            <hr />
+            <div className="submit-buttons">
+              <button onClick={() => AddToGoal(item.goal_id)} disabled={item.status === "completed"}>Add money to goal</button>
+              <button onClick={() => deleteGoal(item.goal_id)}>X</button>
+            </div>
           </div>
         );
       })}

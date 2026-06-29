@@ -1,0 +1,40 @@
+.notifications {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.notifications h2 {
+    margin-bottom: 15px;
+}
+
+.addButton {
+    margin-bottom: 20px;
+}
+
+.notification-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #011538;
+    text-align: left;
+}
+
+.notification-card.read {
+    background: #081a2f;
+    opacity: 0.7;
+}
+
+.notification-card p {
+    margin: 6px 0;
+}
+
+.notification-card2 {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.notification-card2 button:hover {
+    opacity: 0.9;
+}

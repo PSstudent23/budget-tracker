@@ -1,13 +1,64 @@
-.cards {
+.home {
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+.home h2 {
+  margin-bottom: 15px;
+}
+
+.home-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-bottom: 24px;
 }
 
-.card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+.home-card {
+  background: #011538;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   padding: 16px;
+  text-align: left;
+}
+
+.home-card p {
+  margin: 0 0 8px 0;
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.home-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.home-bottom {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  align-items: flex-start;
+}
+
+.home-recent,
+.spent-by-category {
+  width: 50%;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.recent-item .date {
+  font-size: 12px;
+  opacity: 0.7;
 }

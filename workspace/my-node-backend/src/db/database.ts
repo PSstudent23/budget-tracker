@@ -82,6 +82,11 @@ export interface Notification extends RowDataPacket {
   created_at: string;
 }
 
+export interface SpendingByCategory extends RowDataPacket {
+  category: string;
+  total: number;
+}
+
 //Login
 export const authUser = async (email: string): Promise<UserLogin[]> => {
   const [rows] = await pool.query<UserLogin[]>(
@@ -178,19 +183,38 @@ export const deleteTransaction = async (
 };
 
 
+export const recentTransactions = async (
+    user_id: number,
+): Promise<Transaction[]> => {
+  const [rows] = await pool.query<Transaction[]>(
+    `SELECT *
+    FROM transactions
+    WHERE user_id = ?
+    AND YEAR(date) = YEAR(CURDATE())
+    AND MONTH(date) = MONTH(CURDATE())
+    LIMIT 5;`,
+    [user_id]
+  );
+
+  return rows;
+};
+
+
 export const getBudgets = async (
-  user_id: number,
-  
+  user_id: number
 ): Promise<Budget[]> => {
   const [rows] = await pool.query<Budget[]>(
-    `SELECT b.*, total_amount
-    from budgets b
-    LEFT JOIN (
-      SELECT category_id, SUM(amount) AS total_amount
-      FROM transactions
-        WHERE user_id = ?
-        GROUP BY category_id
-    ) c ON b.category_id = c.category_id
+    `SELECT b.*, c.name AS category_name, t.total_amount
+    FROM budgets b
+    JOIN categories c 
+    ON c.category_id = b.category_id
+    LEFT JOIN 
+    ( SELECT category_id, SUM(amount) AS total_amount
+    FROM transactions
+    WHERE user_id = ?
+    GROUP BY category_id
+    ) t 
+    ON t.category_id = b.category_id
     WHERE b.user_id = ?;`,
     [user_id, user_id]
   );
@@ -387,6 +411,18 @@ export const deleteFile = async (
   return result;
 };
 
+export const getFile = async (
+  attachment_id: number
+): Promise<Attachment[]> => {
+  const [rows] = await pool.query<Attachment[]>(
+    `SELECT filename, file_type, file_data 
+    FROM attachment 
+    WHERE attachment_id = ?`,
+    [attachment_id]
+  );
+  return rows;
+};
+
 export const addNotification = async (
   user_id: number,
   category_id: number | null,
@@ -424,6 +460,23 @@ export const readAll = async (
     `UPDATE notifications
      SET is_read = 1
      WHERE user_id = ?`,
+    [user_id]
+  );
+
+  return result;
+};
+
+
+export const spendingByCategory = async (
+  user_id: number,
+): Promise<SpendingByCategory[]> => {
+  const [result] = await pool.query<SpendingByCategory[]>(
+    `SELECT c.name AS category, SUM(t.amount) AS total
+     FROM transactions t
+     JOIN categories c ON c.category_id = t.category_id
+     WHERE t.user_id = ?
+     GROUP BY c.category_id, c.name
+     ORDER BY total DESC;`,
     [user_id]
   );
 

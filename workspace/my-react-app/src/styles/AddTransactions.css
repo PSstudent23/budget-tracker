@@ -1,0 +1,35 @@
+.add-transactions {
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+.add-transactions h1 {
+  margin-bottom: 15px;
+}
+
+.add-transactions-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  background: #011538;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.add-transactions-card input {
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message {
+  margin-bottom: 10px;
+}

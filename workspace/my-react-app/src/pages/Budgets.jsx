@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
+import "../styles/Budgets.css"
+
 
 const API_URL = "http://localhost:30040";
 
@@ -54,23 +56,33 @@ export default function Budgets({ user }) {
     }
   };
 
-  return (
-    <div>
-      <h2>Budgets</h2>
-      <button className="addButton" onClick={() => navigate("/budgets/add")}>add Budget</button>
-     {budgets.map((item) => (
-      <div key={item.budget_id}>
-        <p>budgetId: {item.budget_id}</p>
+return (
+  <div className="budgets">
+    <h2>Budgets</h2>
+
+    <button
+      className="addButton"
+      onClick={() => navigate("/budgets/add")}
+    >
+      add Budget
+    </button>
+
+    {budgets.map((item) => (
+      <div className="budget-card" key={item.budget_id}>
+        <p>Budget ID: {item.budget_id}</p>
         <p>Start: {item.start_date}</p>
         <p>End: {item.end_date}</p>
         <p>Limit: {item.budget_limit}</p>
-        <p>IsActive: {item.is_active}</p>
+        <p>Is Active: {item.is_active}</p>
         <p>Category: {item.category_id}</p>
-        <p>Current spent: {item.total_amount}</p>
-        <button onClick={() => deleteBudget(item.budget_id)}>X</button>
-        <hr />
+        <p>Category Name: {item.category_name}</p>
+        <p>Current Spent: {item.total_amount}</p>
+
+        <div className="budget-card2">
+          <button onClick={() => deleteBudget(item.budget_id)}>X</button>
+        </div>
       </div>
-  ))}
-    </div>
-  );
-}
+    ))}
+  </div>
+);
+} 

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
+import "../styles/Notifications.css"
+
 
 const API_URL = "http://localhost:30040";
 
@@ -55,21 +57,22 @@ export default function Notifications({ user }) {
   }
 
   return (
-    <div>
+    <div className="notifications">
       <h2>Notifications</h2>
-      <button onClick={readAll}>READ ALL</button>
-     {notifications.map((item) => (
-      <div key={item.notification_id }>
-        <p>Notification ID: {item.notification_id }</p>
-        <p>type: {item.type}</p>
-        <p>title: {item.title}</p>
-        <p>message: {item.message}</p>
-        <p>is_read: {item.is_read}</p>
-        <p>Category: {item.category_id}</p>
-        <p>created_at: {item.created_at}</p>
-        <hr />
-      </div>
-  ))}
+
+      <button className="addButton" onClick={readAll}>READ ALL</button>
+
+      {notifications.map((item) => (
+        <div className={`notification-card ${item.is_read ? "read" : ""}`} key={item.notification_id}>
+          <p>Notification ID: {item.notification_id}</p>
+          <p>Type: {item.type}</p>
+          <p>Title: {item.title}</p>
+          <p>Message: {item.message}</p>
+          <p>Is Read: {item.is_read}</p>
+          <p>Category: {item.category_id}</p>
+          <p>Created At: {item.created_at}</p>
+        </div>
+      ))}
     </div>
   );
 }

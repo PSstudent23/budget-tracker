@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
+import "../styles/Settings.css"
+
 
 export default function Settings({ user }) {
   const [first_name, setFirstName] = useState(user.first_name);
@@ -66,17 +68,19 @@ export default function Settings({ user }) {
   }
     
   
-  return (
-    <div>
+return (
+  <div className="profile">
+    <h2>Profile</h2>
 
-      {message}
+    <p>{message}</p>
+
+    <div className="profile-card">
       <input
         type="text"
         placeholder="first_name"
         value={first_name}
         onChange={(e) => setFirstName(e.target.value)}
       />
-      <br />
 
       <input
         type="text"
@@ -84,41 +88,40 @@ export default function Settings({ user }) {
         value={last_name}
         onChange={(e) => setLastName(e.target.value)}
       />
-      <br />
-      
+
       <input
         type="email"
         placeholder="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <br />
-      
+
       <input
         type="number"
         placeholder="monthly_income"
         value={monthly_income}
         onChange={(e) => setMonthlyIncome(e.target.value)}
       />
-      <br />
-      
+
       <hr />
+
       <input
         type="password"
         placeholder="current_password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <br />
-      
+
       <input
         type="password"
         placeholder="new_password"
         onChange={(e) => setNewPassword(e.target.value)}
       />
 
-      <button onClick={handleSubmit}>Submit changes</button>
-
+      <div className="submit-button">
+        <button onClick={handleSubmit}>Submit changes</button>
+      </div>
     </div>
-  );
+  </div>
+);
 }

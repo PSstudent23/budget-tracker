@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
+import "../styles/AddBudgets.css"
+
 
 export default function AddBudgets() {
   const navigate = useNavigate();
@@ -45,52 +47,54 @@ export default function AddBudgets() {
   };
 
   return (
-    <div>
-      <h1>Add Budget</h1>
+  <div className="add-budgets">
+    <h1>Add Budget</h1>
 
-      {message }
+    {message && <p className="message">{message}</p>}
 
+    <div className="add-budgets-card">
+      <p>Select Category</p>
       <input
         type="number"
         placeholder="Category ID"
         value={category_id}
         onChange={(e) => setCategory(e.target.value)}
       />
-      <br />
 
+      <p>Start date for budget</p>
       <input
         type="date"
-        placeholder="Start_date"
         value={start_date}
         onChange={(e) => setStartDate(e.target.value)}
       />
-      <br />
 
+      <p>End date for budget</p>
       <input
         type="date"
-        placeholder="End_Date"
         value={end_date}
         onChange={(e) => setEndDate(e.target.value)}
       />
-      <br />
 
+      <p>Budget limit</p>
       <input
         type="number"
-        placeholder="budget_limit"
+        placeholder="Budget limit"
         value={budget_limit}
         onChange={(e) => setBudgetLimit(e.target.value)}
       />
-      <br />
 
+      <p>Is active (0 / 1)</p>
       <input
         type="number"
-        placeholder="is_active"
+        placeholder="Is active (0 / 1)"
         value={is_active}
         onChange={(e) => setActive(e.target.value)}
       />
-      <br />
 
-      <button onClick={handleSubmit}>Add Budget</button>
+      <div className="submit-button">
+        <button onClick={handleSubmit}>Add Budget</button>
+      </div>
     </div>
-  );
+  </div>
+);
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
+import "../styles/Transactions.css"
 
 const API_URL = "http://localhost:30040";
 
@@ -98,6 +99,8 @@ export default function Transactions({ user }) {
         body: JSON.stringify({ attachment_id })
       });
 
+      console.log(attachment_id)
+
       const data = await res.json();
 
       console.log(data)
@@ -114,34 +117,68 @@ export default function Transactions({ user }) {
     }
   }
 
-  return (
-    <div>
-      <h2>Transactions</h2>
-      <button className="addButton" onClick={() => navigate("/transactions/add")}>add Transaction</button>
+  const downloadFile = async (attachment_id, filename) => {
+    const res = await fetch(`${API_URL}/transactions/download`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ attachment_id }),
+    });
 
-      {message}
+    const blob = await res.blob();
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = filename;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="transactions">
+      <h2>Transactions</h2>
+
+      <button
+        className="addButton"
+        onClick={() => navigate("/transactions/add")}
+      >
+        Add Transaction
+      </button>
+
+      <p>{message}</p>
 
       {transactions.map((item) => (
-        <div key={item.transaction_id}>
-          <p>Amount: {item.amount}</p>
-          <p>Description: {item.description}</p>
-          <p>Date: {item.date}</p>
-          <p>Created: {item.created_at}</p>
-          <p>Goal: {item.goal_name}</p>
-          <p>Category: {item.category_name}</p>
-          <p>Category type: {item.category_type}</p>
-          <p>FileName: {item.filename}</p>
-          <p>File ID: {item.attachment_id}</p>
+        <div className="transaction" key={item.transaction_id}>
+          <div className="transaction-card">
+            <p>Amount: {item.amount}</p>
+            <p>Description: {item.description}</p>
+            <p>Date: {item.date}</p>
+            <p>Created: {item.created_at}</p>
+            <p>Goal: {item.goal_name}</p>
+            <p>Category: {item.category_name}</p>
+            <p>Category type: {item.category_type}</p>
+            <button onClick={() => downloadFile(item.attachment_id, item.filename)} disabled={!item.filename}>File Name: {item.filename}</button>
+            <p>File ID: {item.attachment_id}</p>
+          </div>
 
-          <input
-            type="file"
-            onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}
-          />
-          <button onClick={() => deleteTransaction(item.transaction_id)}>X</button>
-          <button onClick={() => deleteFile(item.attachment_id)}>X: attachment</button>
-          <hr />
+          <div className="submit-area">
+            <input
+              type="file"
+              onChange={(e) => uploadFile(item.transaction_id, e.target.files[0])}
+            />
+            
+
+            <button onClick={() => deleteTransaction(item.transaction_id)}>Delete</button>
+
+            <button onClick={() => deleteFile(item.attachment_id)}>Delete Attachment</button>
+          </div>
         </div>
-  ))}
+      ))}
     </div>
   );
 }

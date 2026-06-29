@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router";
+import "../styles/AddTransactions.css"
+
 
 
 export default function AddTransaction() {
@@ -49,57 +51,55 @@ export default function AddTransaction() {
   const isGoalTransaction = location.state?.goal_id != null;
 
   return (
-    <div>
+    <div className="add-transactions">
       <h1>Add Transaction</h1>
 
-      {message} 
+      {message && <p className="message">{message}</p>}
 
-      <input
-        type="number"
-        placeholder="Category ID"
-        value={category_id}
-        onChange={(e) => setCategory(e.target.value)}
-      />
-      <br />
+      <div className="add-transactions-card">
+        <p>Category ID</p>
+        <input
+          type="number"
+          placeholder="Category ID"
+          value={category_id}
+          onChange={(e) => setCategory(e.target.value)}
+        />
 
-      <input
-        type="number"
-        step="0.01"
-        placeholder="Amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      <br />
-
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
-      <br />
-
-      <input
-        type="text"
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <br />
-
-      {!isGoalTransaction && (
-        <>
+        <p>Amount</p>
+        <input
+          type="number"
+          step="0.01"
+          placeholder="Amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <p>Transaction Date</p>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
+        <p>Description</p>
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <p>Goal ID (optional)</p>
+        {!isGoalTransaction && (
           <input
             type="number"
             placeholder="Goal ID (optional)"
             value={goal_id}
             onChange={(e) => setGoalId(e.target.value)}
           />
-          <br />
-        </>
-      )}
-      <br />
+        )}
 
-      <button onClick={handleSubmit}>Add Transaction</button>
+        <div className="submit-button">
+          <button onClick={handleSubmit}>Add Transaction</button>
+        </div>
+      </div>
     </div>
   );
 }
