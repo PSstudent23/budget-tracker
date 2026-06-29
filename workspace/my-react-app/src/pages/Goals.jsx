@@ -116,7 +116,7 @@ export default function Goals({ user }) {
 
         return (
           <div className="goal-card" key={item.goal_id}>
-            <p style={{fontWeight: "bold" }}>{item.name}</p>
+            <p style={{fontWeight: "bold", color: item.status === "completed" ? "green" : item.status === "behind" ? "red" : ""}}>{item.name}</p>
             <p>Saved: {item.current_amount}€ / {item.target_amount}€</p>
             <p> {(item.current_amount / item.target_amount).toFixed(2) * 100}% complete</p>
             <p>
@@ -131,7 +131,7 @@ export default function Goals({ user }) {
             <p>
               Required pace: €{perMonth}/month over {dif} months remaining
             </p>
-            
+
             <select
               value={item.status}
               onChange={(e) =>
