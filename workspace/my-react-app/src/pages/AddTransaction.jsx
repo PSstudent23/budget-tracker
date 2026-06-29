@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router";
 import "../styles/AddTransactions.css"
 
@@ -35,7 +35,6 @@ export default function AddTransaction() {
     event.preventDefault();
     setMessage("");
 
-
     try {
       const res = await fetch("http://88.200.63.148:30040/api/transactions/add", {
         method: "POST",
@@ -52,11 +51,7 @@ export default function AddTransaction() {
         }),
       });
 
-      console.log("test")
-
       const data = await res.json();
-
-
 
       if (res.ok) {
         navigate("/transactions");
@@ -78,23 +73,13 @@ export default function AddTransaction() {
       {message && <p className="message">{message}</p>}
 
       <div className="add-transactions-card">
-          {!isGoalTransaction && <p>Category</p> && (
-            <>
-              <p>Category</p>
-              <select
-                value={category_id}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value="">Select category</option>
-
-                {categories.map(({ category_id, name, type }) => (
-                  <option key={category_id} value={category_id}>
-                    {name} ({type})
-                  </option>
-                ))}
-              </select>
-            </>
-         )}
+        <p>Category ID</p>
+        <input
+          type="number"
+          placeholder="Category ID"
+          value={category_id}
+          onChange={(e) => setCategory(e.target.value)}
+        />
 
         <p>Amount</p>
         <input
@@ -104,14 +89,12 @@ export default function AddTransaction() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-
         <p>Transaction Date</p>
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
-
         <p>Description</p>
         <input
           type="text"
@@ -119,6 +102,15 @@ export default function AddTransaction() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+        <p>Goal ID (optional)</p>
+        {!isGoalTransaction && (
+          <input
+            type="number"
+            placeholder="Goal ID (optional)"
+            value={goal_id}
+            onChange={(e) => setGoalId(e.target.value)}
+          />
+        )}
 
         <div className="submit-button">
           <button onClick={handleSubmit}>Add Transaction</button>
