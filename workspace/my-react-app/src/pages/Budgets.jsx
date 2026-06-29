@@ -14,7 +14,7 @@ export default function Budgets({ user }) {
   useEffect(() => {
     async function loadBudgets() {
       try {
-        const res = await fetch(`${API_URL}/budgets/show`, {
+        const res = await fetch(`${API_URL}/api/budgets/show`, {
           credentials: "include",
         }); 
 
@@ -32,7 +32,7 @@ export default function Budgets({ user }) {
 
   const deleteBudget = async (budget_id) => {
     try {
-      const res = await fetch(`${API_URL}/budgets/delete`, {
+      const res = await fetch(`${API_URL}/api/budgets/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ return (
     {budgets.map((item) => (
       <div className="budget-card" key={item.budget_id}>
         <p style={{fontWeight: "bold"}}>{item.category_name}</p>
-        <p style={{fontWeight: "bold",  fontSize: "20px", color:  Number(item.total_amount) > Number(item.budget_limit) ? "#e74c3c" : ""}}>{item.total_amount}€/{item.budget_limit}€</p>
+        <p style={{fontWeight: "bold",  fontSize: "20px", color:  Number(item.total_amount) > Number(item.budget_limit) ? "#e74c3c" : ""}}>{!item.total_amount ? 0 : item.total_amount}€/{item.budget_limit}€</p>
         <p> {new Date(item.start_date).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "short",

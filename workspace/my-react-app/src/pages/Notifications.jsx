@@ -14,7 +14,7 @@ export default function Notifications({ user }) {
   useEffect(() => {
     async function loadNotifications() {
       try {
-        const res = await fetch(`${API_URL}/notifications/show`, {
+        const res = await fetch(`${API_URL}/api/notifications/show`, {
           credentials: "include",
         }); 
 
@@ -33,7 +33,7 @@ export default function Notifications({ user }) {
 
   const readAll = async () => {
      try {
-      const res = await fetch("http://localhost:30040/notifications/readAll", {
+      const res = await fetch("http://localhost:30040/api/notifications/readAll", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export default function Notifications({ user }) {
         <div className={`notification-card ${item.is_read ? "read" : ""}`} key={item.notification_id}>
           <p style={{ fontWeight: "bold" }}>{item.title}</p>
           <p>{item.message}</p>
-          <p>Category: {item.category_id}</p>
+          <p>Category: {item.name}</p>
           <p>SENT: {new Date(item.created_at).toLocaleDateString("en-GB", {
                   minute: "numeric",
                   hour: "numeric",

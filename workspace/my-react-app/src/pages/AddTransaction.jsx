@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router";
 import "../styles/AddTransactions.css"
 
@@ -14,13 +14,30 @@ export default function AddTransaction() {
   const [description, setDescription] = useState("");
   const [goal_id, setGoalId] = useState(location.state?.goal_id ? location.state.goal_id : "");
   const [message, setMessage] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  useEffect (() => {
+      async function getCategories() {
+        const res2 = await fetch("http://localhost:30040/api/categories", {
+        credentials: "include"
+        });
+
+        const data2 = await res2.json();
+        setCategories(data2);
+
+        console.log("Categories" + categories)
+      }
+      getCategories();
+ 
+    }, [])
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage("");
 
+
     try {
-      const res = await fetch("http://localhost:30040/transactions/add", {
+      const res = await fetch("http://localhost:30040/api/transactions/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +52,11 @@ export default function AddTransaction() {
         }),
       });
 
+      console.log("test")
+
       const data = await res.json();
+
+
 
       if (res.ok) {
         navigate("/transactions");
@@ -57,13 +78,23 @@ export default function AddTransaction() {
       {message && <p className="message">{message}</p>}
 
       <div className="add-transactions-card">
-        <p>Category ID</p>
-        <input
-          type="number"
-          placeholder="Category ID"
-          value={category_id}
-          onChange={(e) => setCategory(e.target.value)}
-        />
+          {!isGoalTransaction && <p>Category</p> && (
+            <>
+              <p>Category</p>
+              <select
+                value={category_id}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="">Select category</option>
+
+                {categories.map(({ category_id, name, type }) => (
+                  <option key={category_id} value={category_id}>
+                    {name} ({type})
+                  </option>
+                ))}
+              </select>
+            </>
+         )}
 
         <p>Amount</p>
         <input
@@ -73,12 +104,14 @@ export default function AddTransaction() {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
+
         <p>Transaction Date</p>
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
+
         <p>Description</p>
         <input
           type="text"
@@ -86,15 +119,6 @@ export default function AddTransaction() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <p>Goal ID (optional)</p>
-        {!isGoalTransaction && (
-          <input
-            type="number"
-            placeholder="Goal ID (optional)"
-            value={goal_id}
-            onChange={(e) => setGoalId(e.target.value)}
-          />
-        )}
 
         <div className="submit-button">
           <button onClick={handleSubmit}>Add Transaction</button>

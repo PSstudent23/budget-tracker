@@ -6,7 +6,7 @@ export default function AppLayout({ user, children }) {
   const location = useLocation();
 
   async function handleLogout() {
-    const res = await fetch("http://localhost:30040/logout", {
+    const res = await fetch("http://localhost:30040/api/logout", {
       method: "POST",
       credentials: "include",
     })
@@ -33,6 +33,8 @@ export default function AppLayout({ user, children }) {
         <p>
           {user.first_name} {user.last_name}
         </p>
+
+        <br/>
 
         <button className={isActive("/")} onClick={() => navigate("/")}>
           Home

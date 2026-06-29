@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
+import "../styles/Transactions.css"
 
 
 
@@ -19,7 +20,7 @@ export default function AddGoal() {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:30040/goals/add", {
+      const res = await fetch("http://localhost:30040/api/goals/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,55 +49,51 @@ export default function AddGoal() {
   };
 
   return (
+    
     <div>
-      <h1>Add Transaction</h1>
+      <div className="add-transactions">
+        <h1>Add Goal</h1>
 
-      {message}
+        {message}
 
-      <input
-        type="text"
-        placeholder="Goal name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <br />
+        <div className="add-transactions-card">
+          <p>Goal Name</p>
+          <input
+            type="string"
+            placeholder="Goal name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-      <input
-        type="number"
-        step="0.01"
-        placeholder="Target amount"
-        value={target_amount}
-        onChange={(e) => setTargetAmount(e.target.value)}
-      />
-      <br />
+          <p>Target amount</p>
+          <input
+            type="number"
+            step="0.01"
+            placeholder="Target amount"
+            value={target_amount}
+            onChange={(e) => setTargetAmount(e.target.value)}
+          />
 
-      <input
-        type="date"
-        value={target_date}
-        onChange={(e) => setTargetDate(e.target.value)}
-      />
-      <br />
+          <p>Target date</p>
+          <input
+            type="date"
+            value={target_date}
+            onChange={(e) => setTargetDate(e.target.value)}
+          />
 
-      <select
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-      >
-        <option value="not_started">Not Started</option>
-        <option value="in_progress">In Progress</option>
-        <option value="behind">Behind</option>
-        <option value="completed">Completed</option>
-      </select>
-      <br />
+          <p>Goal priority</p>
+          <input
+            type="text"
+            placeholder="Priority"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+          />
 
-      <input
-        type="number"
-        placeholder="Priority"
-        value={priority}
-        onChange={(e) => setPriority(e.target.value)}
-      />
-      <br />
-
-      <button onClick={handleSubmit}>Add Goal</button>
+          <div className="submit-button">
+            <button onClick={handleSubmit}>Add Goal</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -9,6 +9,8 @@ import transactionsRouter from "./routes/transactions.routes.js";
 import budgetsRouter from "./routes/budgets.routes.js";
 import goalsRouter from "./routes/goals.routes.js";
 import notificationsRouter from "./routes/notifications.routes.js";
+import { getCategories } from "./db/database.js";
+
 
 
 dotenv.config();
@@ -20,7 +22,6 @@ app.use(cors({
   origin: "http://localhost:30041",
   credentials: true,
 }));
-
 
 app.use(
   session({
@@ -40,7 +41,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.get("/", async (_req: Request, res: Response) => {
+app.get("/api/", async (_req: Request, res: Response) => {
   let conn;
 
   try {
@@ -61,17 +62,40 @@ app.get("/", async (_req: Request, res: Response) => {
 });
 
 //Show Transactions
-app.use("/transactions", transactionsRouter);
+app.use("/api/transactions", transactionsRouter);
 
-app.use("/budgets", budgetsRouter)
+app.use("/api/budgets", budgetsRouter)
 
-app.use("/goals", goalsRouter)
+app.use("/api/goals", goalsRouter)
 
-app.use("/notifications", notificationsRouter)
+app.use("/api/notifications", notificationsRouter)
+
+app.get("/api/categories", async (req: Request, res: Response) => {
+  if (!req.session.user) {
+    return res.status(401).json({
+      ok: false,
+      message: "Not authenticated",
+    });
+  }
+
+  try {
+    const categories = await getCategories();
+
+    res.json(categories);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      ok: false,
+      message: "Internal server error",
+    });
+  }
+});
+
 //Login and Register
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 
-app.get("/me", (req: Request, res: Response) => {
+app.get("/api/me", (req: Request, res: Response) => {
   if (!req.session.user) {
     return res.status(401).json({
       ok: false,
@@ -84,7 +108,7 @@ app.get("/me", (req: Request, res: Response) => {
   });
 });
 
-app.post("/logout", (req: Request, res: Response) => {
+app.post("/api/logout", (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({ ok: false });
@@ -95,7 +119,6 @@ app.post("/logout", (req: Request, res: Response) => {
     res.json({ ok: true });
   });
 });
-
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);

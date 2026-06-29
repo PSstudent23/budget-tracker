@@ -62,7 +62,7 @@ const createTransaction = async (
     //console.log(result)
 
     if (goal_id) {
-      await updateGoalAmount(goal_id, amount, req.session.user.user_id);
+      await updateGoalAmount(req.session.user.user_id, Number(goal_id), Number(amount));
 
       await addNotification(
       req.session.user.user_id,

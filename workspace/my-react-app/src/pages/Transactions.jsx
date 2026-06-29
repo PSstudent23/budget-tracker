@@ -13,7 +13,7 @@ export default function Transactions({ user }) {
   useEffect(() => {
     async function loadTransactions() {
       try {
-        const res = await fetch(`${API_URL}/transactions/show`, {
+        const res = await fetch(`${API_URL}/api/transactions/show`, {
           credentials: "include",
         }); 
 
@@ -34,7 +34,7 @@ export default function Transactions({ user }) {
 
   const deleteTransaction = async (transaction_id) => {
     try {
-      const res = await fetch("http://localhost:30040/transactions/delete", {
+      const res = await fetch("http://localhost:30040/api/transactions/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export default function Transactions({ user }) {
     formData.append("transaction_id", transaction_id);
 
     try {
-      const res = await fetch("http://localhost:30040/transactions/upload", {
+      const res = await fetch("http://localhost:30040/api/transactions/upload", {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -90,7 +90,7 @@ export default function Transactions({ user }) {
 
   const deleteFile = async (attachment_id) => {
     try {
-      const res = await fetch("http://localhost:30040/transactions/deleteFile", {
+      const res = await fetch("http://localhost:30040/api/transactions/deleteFile", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function Transactions({ user }) {
   }
 
   const downloadFile = async (attachment_id, filename) => {
-    const res = await fetch(`${API_URL}/transactions/download`, {
+    const res = await fetch(`${API_URL}/api/transactions/download`, {
       method: "POST",
       credentials: "include",
       headers: {
