@@ -6,7 +6,7 @@ export default function AppLayout({ user, children }) {
   const location = useLocation();
 
   async function handleLogout() {
-    const res = await fetch("http://localhost:30040/api/logout", {
+    const res = await fetch("http://88.200.63.148:30040/api/logout", {
       method: "POST",
       credentials: "include",
     })

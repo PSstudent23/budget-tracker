@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router";
 import "../styles/Goals.css"
 
 
-const API_URL = "http://localhost:30040";
+const API_URL = "http://88.200.63.148:30040";
 
 export default function Goals({ user }) {
   const [goals, setGoals] = useState([]);
@@ -32,7 +32,7 @@ export default function Goals({ user }) {
 
   const deleteGoal = async (goal_id) => {
     try {
-      const res = await fetch("http://localhost:30040/api/goals/delete", {
+      const res = await fetch("http://88.200.63.148:30040/api/goals/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export default function Goals({ user }) {
   
   const updateStatus = async (goal_id, name, status) => {
     try {
-      const res = await fetch("http://localhost:30040/api/goals/update", {
+      const res = await fetch("http://88.200.63.148:30040/api/goals/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

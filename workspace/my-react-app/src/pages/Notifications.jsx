@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router";
 import "../styles/Notifications.css"
 
 
-const API_URL = "http://localhost:30040";
+const API_URL = "http://88.200.63.148:30040";
 
 export default function Notifications({ user }) {
   const [notifications, setNotifications] = useState([]);
@@ -33,7 +33,7 @@ export default function Notifications({ user }) {
 
   const readAll = async () => {
      try {
-      const res = await fetch("http://localhost:30040/api/notifications/readAll", {
+      const res = await fetch("http://88.200.63.148:30040/api/notifications/readAll", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

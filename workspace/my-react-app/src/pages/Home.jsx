@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/Home.css";
 
-const API_URL = "http://localhost:30040";
+const API_URL = "http://88.200.63.148:30040";
 
 export default function Home({ user }) {
   const [sum, setSum] = useState(0);

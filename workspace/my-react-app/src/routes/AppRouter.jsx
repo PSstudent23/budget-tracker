@@ -26,7 +26,7 @@ export default function App() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("http://localhost:30040/api/me", {
+        const res = await fetch("http://88.200.63.148:30040/api/me", {
           credentials: "include",
         });
         

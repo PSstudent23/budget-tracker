@@ -18,7 +18,7 @@ export default function AddTransaction() {
 
   useEffect (() => {
       async function getCategories() {
-        const res2 = await fetch("http://localhost:30040/api/categories", {
+        const res2 = await fetch("http://88.200.63.148:30040/api/categories", {
         credentials: "include"
         });
 
@@ -37,7 +37,7 @@ export default function AddTransaction() {
 
 
     try {
-      const res = await fetch("http://localhost:30040/api/transactions/add", {
+      const res = await fetch("http://88.200.63.148:30040/api/transactions/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
