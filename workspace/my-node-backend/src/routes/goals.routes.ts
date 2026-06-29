@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { getGoals, addGoal, deleteGoal, getGoalCount, updateGoal, addNotification} from "../db/database.js";
+import { getGoals, addGoal, deleteGoal, getGoalCount, updateGoal, addNotification, deleteTransactionGoal} from "../db/database.js";
 
 const router = Router();
 
@@ -82,6 +82,9 @@ const deleteAGoal = async (
     }
 
     const { goal_id } = req.body;
+
+    await deleteTransactionGoal(goal_id);
+
     const result = await deleteGoal(Number(goal_id));
 
     return res.status(201).json({

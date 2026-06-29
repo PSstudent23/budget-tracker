@@ -31,6 +31,7 @@ export default function Goals({ user }) {
   }, []);
 
   const deleteGoal = async (goal_id) => {
+    console.log(goal_id)
     try {
       const res = await fetch("http://localhost:30040/api/goals/delete", {
         method: "DELETE",
@@ -128,9 +129,14 @@ export default function Goals({ user }) {
               })}
             </p>
 
-            <p>
-              Required pace: €{perMonth}/month over {dif} months remaining
-            </p>
+              
+            {item.target_amount > item.current_amount && (
+              <p>
+                Required pace: €{perMonth}/month over {dif} months remaining
+              </p>
+            )}
+
+            <p>Priority: {item.priority}</p>
 
             <select
               value={item.status}
