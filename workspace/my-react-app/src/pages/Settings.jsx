@@ -86,7 +86,7 @@ return (
         type="text"
         placeholder="last_name"
         value={last_name}
-        onChange={(e) => setLastName(e.target.value)}
+        onChange={(e) => setLastName(e.target.value )}
       />
 
       <input
