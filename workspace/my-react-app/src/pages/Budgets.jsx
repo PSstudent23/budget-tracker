@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from "react-router";
 import "../styles/Budgets.css"
 
 
-const API_URL = "http://localhost:30040";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export default function Budgets({ user }) {
   const [budgets, setBudgets] = useState([]);

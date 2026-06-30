@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import "../styles/Home.css";
 
-const API_URL = "http://localhost:30040";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export default function Home({ user }) {
   const [sum, setSum] = useState(0);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router";
 import "../styles/AddTransactions.css"
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 export default function AddTransaction() {
@@ -18,7 +19,7 @@ export default function AddTransaction() {
 
   useEffect (() => {
       async function getCategories() {
-        const res2 = await fetch("http://localhost:30040/api/categories", {
+        const res2 = await fetch(`${API_URL}/api/categories`, {
         credentials: "include"
         });
 
@@ -37,7 +38,7 @@ export default function AddTransaction() {
 
 
     try {
-      const res = await fetch("http://localhost:30040/api/transactions/add", {
+      const res = await fetch(`${API_URL}/api/transactions/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 
 //  import "../styles/App.css"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 import LandingPage from "../LandingPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -26,7 +28,7 @@ export default function App() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch("http://localhost:30040/api/me", {
+        const res = await fetch(`${API_URL}/api/me`, {
           credentials: "include",
         });
         
