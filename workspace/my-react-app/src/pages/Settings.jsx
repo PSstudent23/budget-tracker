@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import "../styles/Settings.css"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 
 export default function Settings({ user }) {
   const [first_name, setFirstName] = useState(user.first_name);
@@ -20,7 +23,7 @@ export default function Settings({ user }) {
     setMessage("");
 
     try {
-      const res = await fetch("http://88.200.63.148:30040/api/users/update", {
+      const res = await fetch(`${API_URL}/api/users/update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +55,7 @@ export default function Settings({ user }) {
   };
 
   async function handleLogout() {
-    const res = await fetch("http://88.200.63.148:30040/api/logout", {
+    const res = await fetch(`${API_URL}/api/logout`, {
       method: "POST",
       credentials: "include",
     })

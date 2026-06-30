@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import "../styles/Transactions.css"
 
-const API_URL = "http://88.200.63.148:30040";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export default function Transactions({ user }) {
   const [transactions, setTransactions] = useState([]);
@@ -34,7 +35,7 @@ export default function Transactions({ user }) {
 
   const deleteTransaction = async (transaction_id) => {
     try {
-      const res = await fetch("http://88.200.63.148:30040/api/transactions/delete", {
+      const res = await fetch(`${API_URL}/api/transactions/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +69,7 @@ export default function Transactions({ user }) {
     formData.append("transaction_id", transaction_id);
 
     try {
-      const res = await fetch("http://88.200.63.148:30040/api/transactions/upload", {
+      const res = await fetch(`${API_URL}/api/transactions/upload`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -90,7 +91,7 @@ export default function Transactions({ user }) {
 
   const deleteFile = async (attachment_id) => {
     try {
-      const res = await fetch("http://88.200.63.148:30040/api/transactions/deleteFile", {
+      const res = await fetch(`${API_URL}/api/transactions/deleteFile`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 
-const API_URL = "http://88.200.63.148:30040";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Login({ setUser }) {
   const [email, setUsername] = useState("");
@@ -15,6 +15,7 @@ export default function Login({ setUser }) {
     setMessage("");
 
     try {
+      console.log(API_URL)
       const res = await fetch(`${API_URL}/api/users/login`, {
         method: "POST",
         headers: {

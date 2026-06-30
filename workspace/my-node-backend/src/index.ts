@@ -13,6 +13,7 @@ import notificationsRouter from "./routes/notifications.routes.js";
 import { fileURLToPath } from "url";
 import { getCategories } from "./db/database.js";
 
+
 dotenv.config();
 
 const app = express();

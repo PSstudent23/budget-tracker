@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import "../styles/Transactions.css"
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 export default function AddGoal() {
@@ -20,7 +21,7 @@ export default function AddGoal() {
     setMessage("");
 
     try {
-      const res = await fetch("http://88.200.63.148:30040/api/goals/add", {
+      const res = await fetch(`${API_URL}/api/goals/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

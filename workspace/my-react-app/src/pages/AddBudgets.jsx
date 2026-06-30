@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import "../styles/AddBudgets.css"
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AddBudgets() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function AddBudgets() {
 
     useEffect (() => {
         async function getCategories() {
-          const res2 = await fetch("http://88.200.63.148:30040/api/categories", {
+          const res2 = await fetch(`${API_URL}/api/categories`, {
           credentials: "include"
           });
   
@@ -34,7 +35,7 @@ export default function AddBudgets() {
     setMessage("");
 
     try {
-      const res = await fetch("http://88.200.63.148:30040/api/budgets/add", {
+      const res = await fetch(`${API_URL}/api/budgets/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

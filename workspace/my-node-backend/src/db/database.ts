@@ -176,13 +176,6 @@ export const addTransaction = async (
 export const deleteTransaction = async (
     transaction_id: number
 ): Promise<ResultSetHeader> => {
-
-  await pool.query(
-    'DELETE FROM attachment WHERE transaction_id = ?',
-    [transaction_id]
-  );
-
-
   const [result] = await pool.query<ResultSetHeader>(
     `DELETE FROM transactions WHERE transaction_id = ?`,
     [transaction_id]
@@ -190,6 +183,19 @@ export const deleteTransaction = async (
 
   return result;
 };
+
+export const deleteTransactionGoal = async (
+    goal_id: number
+): Promise<ResultSetHeader> => {
+  const [result] = await pool.query<ResultSetHeader>(
+    `DELETE FROM transactions WHERE goal_id = ?`,
+    [goal_id]
+  );
+
+  return result;
+};
+
+
 
 
 export const recentTransactions = async (
@@ -263,7 +269,7 @@ export const getGoals = async (
   user_id: number,
 ): Promise<Goal[]> => {
   const [rows] = await pool.query<Goal[]>(
-    `SELECT * FROM goals WHERE user_id = ?`,
+    `SELECT * FROM goals WHERE user_id = ? ORDER by priority ASC`,
     [user_id]
   );
 
