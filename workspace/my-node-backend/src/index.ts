@@ -41,7 +41,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.get("/api/", async (_req: Request, res: Response) => {
+app.get("/api", async (_req: Request, res: Response) => {
   let conn;
 
   try {
